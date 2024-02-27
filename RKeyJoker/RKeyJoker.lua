@@ -7,14 +7,8 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
-function table_length(table)
-    local count = 0
-    for _ in pairs(table) do count = count + 1 end
-    return count
-end
-
-function SMODS.INIT.MystJokers()
-    local mystJokers = {
+function SMODS.INIT.RKeyJoker()
+    local jokers = {
         -- R Key - -10 Ante, down to minimum of 1
         j_rkey = {
             order = 0,
@@ -27,16 +21,18 @@ function SMODS.INIT.MystJokers()
             name = "R Key",
             set = "Joker",
             config = { extra = {}},
-            pos = { x = 0, y = 16 }
+            pos = { x = 0, y = 0 },
+            atlas = "RKeyJoker"
         },
     }
 
     -- Add Jokers to center
-    for k, v in pairs(mystJokers) do
+    for k, v in pairs(jokers) do
         v.key = k
-        v.order = table_length(G.P_CENTER_POOLS['Joker']) + 1
+        v.order = #G.P_CENTER_POOLS['Joker'] + 1
         G.P_CENTERS[k] = v
         table.insert(G.P_CENTER_POOLS['Joker'], v)
+        table.insert(G.P_JOKER_RARITY_POOLS[v.rarity], v)
     end
 
     table.sort(G.P_CENTER_POOLS["Joker"], function (a, b) return a.order < b.order end)
@@ -58,32 +54,11 @@ function SMODS.INIT.MystJokers()
     end
 
     -- Update localization
-    for g_k, group in pairs(G.localization) do
-        if g_k == 'descriptions' then
-            for _, set in pairs(group) do
-                for _, center in pairs(set) do
-                    center.text_parsed = {}
-                    for _, line in ipairs(center.text) do
-                        center.text_parsed[#center.text_parsed + 1] = loc_parse_string(line)
-                    end
-                    center.name_parsed = {}
-                    for _, line in ipairs(type(center.name) == 'table' and center.name or { center.name }) do
-                        center.name_parsed[#center.name_parsed + 1] = loc_parse_string(line)
-                    end
-                    if center.unlock then
-                        center.unlock_parsed = {}
-                        for _, line in ipairs(center.unlock) do
-                            center.unlock_parsed[#center.unlock_parsed + 1] = loc_parse_string(line)
-                        end
-                    end
-                end
-            end
-        end
-    end
+    init_localization()
 
     -- Add sprites
     local rkey_mod = SMODS.findModByID("RKeyJoker")
-    local sprite_rkey = SMODS.Sprite:new("Joker", rkey_mod.path, "Jokers_rkey.png", 71, 95, "asset_atli")
+    local sprite_rkey = SMODS.Sprite:new("RKeyJoker", rkey_mod.path, "Joker_rkey.png", 71, 95, "asset_atli")
 
     sprite_rkey:register()
 end
@@ -104,9 +79,8 @@ function Card.set_ability(self, center, initial, delay_sprites)
     set_abilityref(self, center, initial, delay_sprites)
 
     if self.ability.name == "R Key" then
-        if self.area == G.joker then self.base_cost = 7 end
-        self.sell_cost = 4
-        --if G.GAME.used_rkey then sendDebugMessage("r key used") end
+        self.ability.extra_value = -94
+        self:set_sprites(center)
     end
 end
 
@@ -126,9 +100,6 @@ function Card.calculate_joker(self, context)
                     G.E_MANAGER:add_event(Event({
                         func = (function()
                             for _ = 1, 10 do
-                                sendDebugMessage(G.GAME.round_resets.blind_ante)
-                                sendDebugMessage(G.GAME.round_resets.ante)
-
                                 if G.GAME.round_resets.blind_ante <= 0 or G.GAME.round_resets.ante <= 0 then break end
 
                                 ease_ante(-1)
