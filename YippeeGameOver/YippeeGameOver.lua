@@ -1,5 +1,5 @@
 --- STEAMODDED HEADER
---- MOD_NAME: Yippee Joker over Game Over
+--- MOD_NAME: Yippee Joker over Win Screen
 --- MOD_ID: YippeeGameOver
 --- MOD_AUTHOR: [Mysthaps]
 --- MOD_DESCRIPTION: YIPPEEEEEEEE!!!
@@ -25,14 +25,8 @@ function SMODS.INIT.YippeeGameOver()
     -- Add Yippee Joker
     G.P_CENTERS.j_yippee = {
         order = 0,
-        unlocked = false,
-        discovered = false,
-        blueprint_compat = false,
-        eternal_compat = false,
-        rarity = 1,
-        cost = 0,
         name = "yippee",
-        set = "Joker",
+        set = "",
         config = {},
         pos = { x = 0, y = 0 },
         atlas = "YippeeGameOver"

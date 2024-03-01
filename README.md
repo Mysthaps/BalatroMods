@@ -6,6 +6,6 @@ A collection of mods made by Myst for the game Balatro.
 - **YippeeGameOver**: Replaces Jimbo in the win screen with tbh
 
 R Key sprite from The Binding of Isaac: Repentance
-Yippee Joker sprite by C_rry
+Modified Yippee Joker sprite by C_rry
 
 Requires [Steamodded](https://github.com/Steamopollys/Steamodded).
