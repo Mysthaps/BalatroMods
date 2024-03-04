@@ -37,11 +37,12 @@ Does not count itself as an empty Joker slot. However, it will count **Joker Ste
 
 # R Key
 - **Rarity**: Rare
-- **Base Cost**: $99
+- **Base Cost**: $15
 - Incompatible with **Blueprint**
+- Incompatible with **Eternal**
 - **Description**: Sell this Joker to reduce Ante by **3**, down to minimum Ante **1**. All future **R Keys** will not work once sold
 
-Has -46 bonus sell cost, bringing the base sell cost down to 3.
+Has +84 extra cost, bringing the buying cost up to 99.
 After an **R Key** is sold, other **R Keys** will be debuffed when they are sold.
 
 *Art from The Binding of Isaac: Repentance. Originally a standalone mod that reduces Ante by 10 instead. Quite balanced.*

@@ -7,51 +7,101 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
+local localization = {
+    polydactyly = {
+        name = "Polydactyly",
+        text = {
+            "Choose an extra card",
+            "from {C:attention}Booster Packs{}",
+        }
+    },
+    miracle_milk = {
+        name = "Miracle Milk",
+        text = {
+            "{C:attention}Debuffed{} cards count",
+            "for scoring"
+        }
+    },
+    yield_flesh = {
+        name = "Yield My Flesh",
+        text = {
+            "{X:mult,C:white} X2.5 {} Mult after first played",
+            "hand scores less than",
+            "{C:attention}5%{} of required chips"
+        }
+    },
+    autism_creature = {
+        name = "Autism Creature",
+        text = {
+            "{C:mult}+6{} Mult for each",
+            "empty {C:attention}Joker{} slot",
+            "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
+        }
+    },
+    r_key = {
+        name = "R Key",
+        text = {
+            "Sell this Joker to reduce Ante",
+            "by {C:attention}3{}, down to minimum Ante {C:attention}1{}",
+            "All future {C:attention}R Keys{}",
+            "will not work once sold"
+        }
+    },
+}
+
+--[[SMODS.Joker:new(
+    name, slug,
+    config,
+    spritePos, loc_txt,
+    rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat
+)
+]]
+local jokers = {
+    polydactyly = SMODS.Joker:new(
+        "Polydactyly", "",
+        {},
+        { x = 0, y = 0 }, "",
+        2, 6, true, true, false, true
+    ),
+    miracle_milk = SMODS.Joker:new(
+        "Miracle Milk", "",
+        {},
+        { x = 1, y = 0 }, "",
+        1, 5, true, true, false, true
+    ),
+    yield_flesh = SMODS.Joker:new(
+        "Yield My Flesh", "",
+        { extra = { Xmult = 2.5, active = false } },
+        { x = 2, y = 0 }, "",
+        2, 7, true, true, true, true
+    ),
+    autism_creature = SMODS.Joker:new(
+        "Autism Creature", "",
+        { extra = 0 },
+        { x = 3, y = 0 }, "",
+        1, 5, true, true, true, true
+    ),
+    r_key = SMODS.Joker:new(
+        "R Key", "",
+        {},
+        { x = 4, y = 0 }, "",
+        3, 15, true, true, false, false
+    )
+}
+
+-- Blacklist individual Jokers here
+local jokerBlacklists = {
+    polydactyly = false,
+    miracle_milk = false,
+    yield_flesh = false,
+    autism_creature = false,
+    r_key = false
+}
+
 function SMODS.INIT.MystJokers()
     sendDebugMessage("Loaded MystJokers~")
 
-    local localization = {
-        polydactyly = {
-            name = "Polydactyly",
-            text = {
-                "Choose an extra card",
-                "from {C:attention}Booster Packs{}",
-            }
-        },
-        miracle_milk = {
-            name = "Miracle Milk",
-            text = {
-                "{C:attention}Debuffed{} cards count",
-                "for scoring"
-            }
-        },
-        yield_flesh = {
-            name = "Yield My Flesh",
-            text = {
-                "{X:mult,C:white} X2.5 {} Mult after first played",
-                "hand scores less than",
-                "{C:attention}5%{} of required chips"
-            }
-        },
-        autism_creature = {
-            name = "Autism Creature",
-            text = {
-                "{C:mult}+6{} Mult for each",
-                "empty {C:attention}Joker{} slot",
-                "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
-            }
-        },
-        r_key = {
-            name = "R Key",
-            text = {
-                "Sell this Joker to reduce Ante",
-                "by {C:attention}3{}, down to minimum Ante {C:attention}1{}",
-                "All future {C:attention}R Keys{}",
-                "will not work once sold"
-            }
-        },
-    }
-    -- Misc localization
+    -- Localization
     G.localization.misc.dictionary.k_cleansed = "Cleansed!"
     G.localization.descriptions.Joker.j_claim_bones = {
         name = "To Claim Their Bones",
@@ -63,75 +113,20 @@ function SMODS.INIT.MystJokers()
     }
     init_localization()
 
-    --[[SMODS.Joker:new(
-        name, slug,
-        config,
-        spritePos, loc_txt,
-        rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat,
-        atlas
-    )
-    ]]
-       --
-    local jokers = {
-        polydactyly = SMODS.Joker:new(
-            "Polydactyly", "",
-            {},
-            { x = 0, y = 0 }, "",
-            2, 6, true, true, false, true,
-            "MystJokers"
-        ),
-        miracle_milk = SMODS.Joker:new(
-            "Miracle Milk", "",
-            {},
-            { x = 1, y = 0 }, "",
-            1, 5, true, true, false, true,
-            "MystJokers"
-        ),
-        yield_flesh = SMODS.Joker:new(
-            "Yield My Flesh", "",
-            { extra = { Xmult = 2.5, active = false } },
-            { x = 2, y = 0 }, "",
-            2, 7, true, true, true, true,
-            "MystJokers"
-        ),
-        autism_creature = SMODS.Joker:new(
-            "Autism Creature", "",
-            { extra = 0 },
-            { x = 3, y = 0 }, "",
-            1, 5, true, true, true, true,
-            "MystJokers"
-        ),
-        r_key = SMODS.Joker:new(
-            "R Key", "",
-            {},
-            { x = 4, y = 0 }, "",
-            3, 99, true, true, false, true,
-            "MystJokers"
-        )
-    }
-    -- Blacklist individual Jokers here
-    local jokerBlacklists = {
-        polydactyly = false,
-        miracle_milk = false,
-        yield_flesh = false,
-        autism_creature = false,
-        r_key = false
-    }
-
+    -- Add Jokers to center
     for k, v in pairs(jokers) do
-        if not jokerBlacklists.k then
+        if not jokerBlacklists[k] then
             v.slug = "j_" .. k
             v.loc_txt = localization[k]
+            v.config.mod = "MystJokers"
             v:register()
         end
     end
 
     -- Add sprites
-    SMODS.Sprite:new("MystJokers", SMODS.findModByID("MystJokers").path, "MystJokers.png", 71, 95, "asset_atli")
-        :register()
+    SMODS.Sprite:new("MystJokers", SMODS.findModByID("MystJokers").path, "MystJokers.png", 71, 95, "asset_atli"):register()
 
     --- Lame joker abilities ---
-
     -- Miracle Milk
     SMODS.Jokers.j_miracle_milk.calculate = function(self, context)
         if context.cardarea == G.jokers and context.before and not context.blueprint then
@@ -204,7 +199,7 @@ function SMODS.INIT.MystJokers()
 
     -- R Key
     SMODS.Jokers.j_r_key.effect = function(self, context)
-        self.ability.extra_value = -46
+        self.ability.extra_cost = (self.ability.extra_cost or 0) + 84
     end
 
     SMODS.Jokers.j_r_key.calculate = function(self, context)
@@ -217,7 +212,7 @@ function SMODS.INIT.MystJokers()
                 G.E_MANAGER:add_event(Event({
                     func = (function()
                         for _ = 1, 3 do
-                            if G.GAME.round_resets.blind_ante <= 0 or G.GAME.round_resets.ante <= 0 then break end
+                            if G.GAME.round_resets.blind_ante <= 1 or G.GAME.round_resets.ante <= 1 then break end
 
                             ease_ante(-1)
                             G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
@@ -237,7 +232,7 @@ end
 --- the good shit ---
 
 -- Init variables
-local init_game_objectobjref = Game.init_game_object;
+local init_game_objectobjref = Game.init_game_object
 function Game.init_game_object(self)
     local gameObj = init_game_objectobjref(self)
 
@@ -312,6 +307,27 @@ function Card.generate_UIBox_ability_table(self)
         end
     end
     return generate_UIBox_ability_tableref(self)
+end
+
+-- Makeshift atlas
+local set_spritesref = Card.set_sprites
+function Card.set_sprites(self, _center, _front)
+    if _center then
+        sendDebugMessage("center exists for ".._center.name)
+        if _center.config and _center.config.mod then
+            sendDebugMessage("found modded jokers! ".._center.name)
+        end
+    end
+    if _center and _center.config.mod then
+        _center.set = _center.config.mod
+        _center.atlas = _center.config.mod
+    end
+
+    set_spritesref(self, _center, _front)
+
+    if _center and _center.config.mod then
+        _center.set = "Joker"
+    end
 end
 
 -- Card updates

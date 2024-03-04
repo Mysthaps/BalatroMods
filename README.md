@@ -10,7 +10,4 @@ Joker credits can be found in ``MystJokers\Jokers.md``
 Yippee Joker sprite by C_rry
 
 ### Requires [Steamodded](https://github.com/Steamopollys/Steamodded).
-
-# For MystJokers
-Requires a modified version of **Steamodded** as custom joker atlas support has not been added yet. See this repo's Releases.
-(This will be taken down once Steamodded is updated with their atlas support)
+### **MystJokers** requires Steamodded 0.7.0 or above.
