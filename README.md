@@ -1,6 +1,6 @@
 A collection of mods made by Myst for the game Balatro.
 
-- **MystJokers**: Adds more Jokers to the game. Before you install, read below.
+- **MystJokers**: Adds more Jokers to the game.
 - **GoldenChallenge**: Adds the challenge "Golden".
 - **RandomSprite**: Randomizes the sprites of all Jokers, Vouchers, Boosters and comsumables. This will also randomize all modded cards into vanilla sprites.
 - **YippeeGameOver**: Replaces Jimbo in the win screen with tbh
