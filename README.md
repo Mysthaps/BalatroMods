@@ -9,5 +9,5 @@ Joker credits can be found in ``MystJokers\Jokers.md``
 Yippee Joker sprite by C_rry
 GoldenChallenge port by UwUDev
 
-### Requires [Steamodded](https://github.com/Steamopollys/Steamodded) or [Balamod](https://github.com/UwUDev/balamod), depending on the file you choose.
-### **MystJokers** requires Steamodded 0.7.0 or above.
+### Requires [Steamodded](https://github.com/Steamopollys/Steamodded) or [Balamod](https://github.com/UwUDev/balamod) v0.1.9+, depending on the loader you choose.
+### **MystJokers** requires Steamodded 0.7.0+.
