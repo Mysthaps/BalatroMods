@@ -47,6 +47,15 @@ local localization = {
             "will not work once sold"
         }
     },
+    lucky_seven = {
+        name = "Lucky Seven",
+        text = {
+            "When {C:attention}Blind{} is selected,",
+            "lose {C:money}$3{} and use",
+            "{C:attention}The Wheel of Fortune{}",
+            "{s:0.8}(if possible){}",
+        }
+    }
 }
 
 --[[SMODS.Joker:new(
@@ -60,32 +69,38 @@ local jokers = {
     polydactyly = SMODS.Joker:new(
         "Polydactyly", "",
         {},
-        { x = 0, y = 0 }, "",
+        {}, "",
         2, 6, true, true, false, true
     ),
     miracle_milk = SMODS.Joker:new(
         "Miracle Milk", "",
         {},
-        { x = 1, y = 0 }, "",
+        {}, "",
         1, 5, true, true, false, true
     ),
     yield_flesh = SMODS.Joker:new(
         "Yield My Flesh", "",
         { extra = { Xmult = 2.5, active = false } },
-        { x = 2, y = 0 }, "",
+        {}, "",
         2, 7, true, true, true, true
     ),
     autism_creature = SMODS.Joker:new(
         "Autism Creature", "",
         { extra = 0 },
-        { x = 3, y = 0 }, "",
+        {}, "",
         1, 5, true, true, true, true
     ),
     r_key = SMODS.Joker:new(
         "R Key", "",
         {},
-        { x = 4, y = 0 }, "",
+        {}, "",
         3, 15, true, true, false, false
+    ),
+    lucky_seven = SMODS.Joker:new(
+        "Lucky Seven", "",
+        {},
+        {}, "",
+        1, 4, true, true, false, true
     )
 }
 
@@ -95,7 +110,8 @@ local jokerBlacklists = {
     miracle_milk = false,
     yield_flesh = false,
     autism_creature = false,
-    r_key = false
+    r_key = false,
+    lucky_seven = false
 }
 
 function SMODS.INIT.MystJokers()
@@ -103,6 +119,7 @@ function SMODS.INIT.MystJokers()
 
     -- Localization
     G.localization.misc.dictionary.k_cleansed = "Cleansed!"
+    G.localization.misc.dictionary.k_wheel = "Wheel!"
     G.localization.descriptions.Joker.j_claim_bones = {
         name = "To Claim Their Bones",
         text = {
@@ -118,13 +135,11 @@ function SMODS.INIT.MystJokers()
         if not jokerBlacklists[k] then
             v.slug = "j_" .. k
             v.loc_txt = localization[k]
-            v.config.mod = "MystJokers"
+            v.spritePos = { x = 0, y = 0 }
             v:register()
+            SMODS.Sprite:new(v.slug, SMODS.findModByID("MystJokers").path, v.slug..".png", 71, 95, "asset_atli"):register()
         end
     end
-
-    -- Add sprites
-    SMODS.Sprite:new("MystJokers", SMODS.findModByID("MystJokers").path, "MystJokers.png", 71, 95, "asset_atli"):register()
 
     --- Lame joker abilities ---
     -- Miracle Milk
@@ -227,6 +242,29 @@ function SMODS.INIT.MystJokers()
             end
         end
     end
+
+    -- Lucky Seven
+    SMODS.Jokers.j_lucky_seven.calculate = function(self, context)
+        if context.setting_blind and not self.getting_sliced and not context.blueprint then
+            local can_trigger = false
+            for _, v in pairs(G.jokers.cards) do
+                if v.ability.set == "Joker" and not v.edition then
+                    can_trigger = true
+                end
+            end
+
+            if can_trigger then
+                local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W/2, G.play.T.y + G.play.T.h/2-G.CARD_H/2, G.CARD_W, G.CARD_H, 
+                G.P_CARDS.empty, G.P_CENTERS["c_wheel_of_fortune"], {bypass_discovery_center = true, bypass_discovery_ui = true})
+                card.cost = 0
+                card:update()
+                G.FUNCS.use_card({config = {ref_table = card}})
+                card:start_materialize()
+
+                ease_dollars(-3)
+            end
+        end
+    end
 end
 
 --- the good shit ---
@@ -309,27 +347,6 @@ function Card.generate_UIBox_ability_table(self)
     return generate_UIBox_ability_tableref(self)
 end
 
--- Makeshift atlas
-local set_spritesref = Card.set_sprites
-function Card.set_sprites(self, _center, _front)
-    if _center then
-        sendDebugMessage("center exists for ".._center.name)
-        if _center.config and _center.config.mod then
-            sendDebugMessage("found modded jokers! ".._center.name)
-        end
-    end
-    if _center and _center.config.mod then
-        _center.set = _center.config.mod
-        _center.atlas = _center.config.mod
-    end
-
-    set_spritesref(self, _center, _front)
-
-    if _center and _center.config.mod then
-        _center.set = "Joker"
-    end
-end
-
 -- Card updates
 local card_updateref = Card.update
 function Card.update(self, dt)
@@ -349,6 +366,7 @@ local add_to_deckref = Card.add_to_deck
 function Card.add_to_deck(self, from_debuff)
     if not self.added_to_deck then
         if self.ability.name == "Polydactyly" then
+            G.GAME.extra_gacha_pulls = (G.GAME.extra_gacha_pulls or 0)
             G.GAME.extra_gacha_pulls = G.GAME.extra_gacha_pulls + 1
         end
     end
@@ -359,6 +377,7 @@ local remove_from_deckref = Card.remove_from_deck
 function Card.remove_from_deck(self, from_debuff)
     if self.added_to_deck then
         if self.ability.name == "Polydactyly" then
+            G.GAME.extra_gacha_pulls = (G.GAME.extra_gacha_pulls or 0)
             G.GAME.extra_gacha_pulls = G.GAME.extra_gacha_pulls - 1
         end
     end
