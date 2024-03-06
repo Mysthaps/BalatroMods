@@ -46,3 +46,14 @@ Has +84 extra cost, bringing the buying cost up to 99.
 After an **R Key** is sold, other **R Keys** will be debuffed when they are sold.
 
 *Art from The Binding of Isaac: Repentance. Originally a standalone mod that reduces Ante by 10 instead. Quite balanced.*
+
+# Lucky Seven
+- **Rarity**: Common
+- **Base Cost**: $4
+- Incompatible with **Blueprint**
+- **Description**: When **Blind** is selected, lose **$3** and use **The Wheel of Fortune** *(if possible)*
+
+Can make you go into debt.
+Does not take money or use **The Wheel of Fortune** if all Jokers have an edition.
+
+*Art by Revenge. Gambling pog.*
