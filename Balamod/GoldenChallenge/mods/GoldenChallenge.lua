@@ -28,7 +28,7 @@ table.insert(mods,
                 jokers = {
                     { id = 'j_golden',     eternal = true, edition = 'negative' },
                     { id = 'j_ticket',     eternal = true, edition = 'negative' },
-                    { id = 'j_midas_mask', eternal = true }
+                    { id = 'j_midas_mask', eternal = true, edition = 'negative' }
                 },
                 consumeables = {
                 },
@@ -41,22 +41,6 @@ table.insert(mods,
                 restrictions = {
                     banned_cards = {
                         { id = 'j_vampire' },
-                        { id = 'v_clearance_sale' },
-                        { id = 'v_liquidation' },
-                        { id = 'c_magician' },
-                        { id = 'c_empress' },
-                        { id = 'c_heirophant' },
-                        { id = 'c_chariot' },
-                        { id = 'c_devil' },
-                        { id = 'c_tower' },
-                        { id = 'c_lovers' },
-                        { id = 'c_incantation' },
-                        { id = 'c_grim' },
-                        { id = 'c_familiar' },
-                        { id = 'c_talisman' },
-                        { id = 'c_deja_vu' },
-                        { id = 'c_trance' },
-                        { id = 'c_medium' },
                     },
                     banned_tags = {
                     },
