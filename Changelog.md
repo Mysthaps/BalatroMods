@@ -1,5 +1,9 @@
 # Changelog
 
+## March 8th, 2024
+### **[MystJokers]**
+- Fixed **Polydactyly** permanently increasing the amount of options after buying any **Booster Pack**
+
 ## March 6th, 2024
 
 ### **[Repo]**

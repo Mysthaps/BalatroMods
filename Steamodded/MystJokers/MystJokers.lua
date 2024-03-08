@@ -386,12 +386,17 @@ end
 
 local openref = Card.open
 function Card.open(self)
+    local temp = 0
     if self.ability.set == "Booster" then
         self.config.center.config.choose = self.config.center.config.choose or 1
+        temp = self.config.center.config.choose
         self.config.center.config.choose = math.min(self.config.center.config.choose + G.GAME.extra_gacha_pulls,
             self.ability.extra)
     end
     openref(self)
+    if self.ability.set == "Booster" then
+        self.config.center.config.choose = temp
+    end
 end
 
 -- Yield My Flesh
