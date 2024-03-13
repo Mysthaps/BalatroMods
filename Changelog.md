@@ -1,5 +1,10 @@
 # Changelog
 
+## March 13th, 2024
+### **[MystJokers]**
+- Added **Options**
+- Recoded **Polydactyly** - should stop crashes relating to ``extra_gacha_pulls`` now
+
 ## March 8th, 2024
 ### **[MystJokers]**
 - Fixed **Polydactyly** permanently increasing the amount of options after buying any **Booster Pack**

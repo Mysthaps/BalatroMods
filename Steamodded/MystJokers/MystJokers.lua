@@ -52,10 +52,17 @@ local localization = {
         text = {
             "When {C:attention}Blind{} is selected,",
             "lose {C:money}$3{} and use",
-            "{C:attention}The Wheel of Fortune{}",
+            "{C:attention, T:c_wheel_of_fortune}The Wheel of Fortune{}",
             "{s:0.8}(if possible){}",
         }
-    }
+    },
+    options = {
+        name = "Options",
+        text = {
+            "After playing a hand,",
+            "draw {C:attention}two{} extra cards"
+        }
+    },
 }
 
 --[[SMODS.Joker:new(
@@ -101,7 +108,13 @@ local jokers = {
         {},
         {}, "",
         1, 4, true, true, false, true
-    )
+    ),
+    options = SMODS.Joker:new(
+        "Options", "",
+        { extra = 1 },
+        {}, "",
+        1, 4, true, true, true, true
+    ),
 }
 
 -- Blacklist individual Jokers here
@@ -111,7 +124,8 @@ local jokerBlacklists = {
     yield_flesh = false,
     autism_creature = false,
     r_key = false,
-    lucky_seven = false
+    lucky_seven = false,
+    options = false
 }
 
 function SMODS.INIT.MystJokers()
@@ -265,6 +279,17 @@ function SMODS.INIT.MystJokers()
             end
         end
     end
+
+    -- Options
+    SMODS.Jokers.j_options.effect = function(self, context)
+        self.ability.extra = G.GAME.current_round.hands_played + 1
+    end
+
+    SMODS.Jokers.j_options.calculate = function(self, context)
+        if context.setting_blind and not self.getting_sliced and not context.blueprint then
+            self.ability.extra = 1
+        end
+    end
 end
 
 --- the good shit ---
@@ -274,7 +299,6 @@ local init_game_objectobjref = Game.init_game_object
 function Game.init_game_object(self)
     local gameObj = init_game_objectobjref(self)
 
-    gameObj.extra_gacha_pulls = 0
     gameObj.used_rkey = false
 
     return gameObj
@@ -303,6 +327,10 @@ function Card.generate_UIBox_ability_table(self)
             customJoker = true
         elseif self.ability.name == 'Autism Creature' then
             loc_vars = { self.ability.extra }
+            customJoker = true
+        elseif self.ability.name == "Lucky Seven" then
+            customJoker = true
+        elseif self.ability.name == "Draw Two" then
             customJoker = true
         end
 
@@ -339,7 +367,6 @@ function Card.generate_UIBox_ability_table(self)
             local center = self.config.center
             if self.ability.name == "Yield My Flesh" or self.ability.name == "To Claim Their Bones" then
                 center.key = self.ability.extra.active and 'j_claim_bones' or 'j_yield_flesh'
-                sendDebugMessage("pong")
             end
             return generate_card_ui(center, nil, loc_vars, card_type, badges, hide_desc, main_start, main_end)
         end
@@ -362,35 +389,19 @@ function Card.update(self, dt)
 end
 
 -- Polydactyly
-local add_to_deckref = Card.add_to_deck
-function Card.add_to_deck(self, from_debuff)
-    if not self.added_to_deck then
-        if self.ability.name == "Polydactyly" then
-            G.GAME.extra_gacha_pulls = (G.GAME.extra_gacha_pulls or 0)
-            G.GAME.extra_gacha_pulls = G.GAME.extra_gacha_pulls + 1
-        end
-    end
-    add_to_deckref(self, from_debuff)
-end
-
-local remove_from_deckref = Card.remove_from_deck
-function Card.remove_from_deck(self, from_debuff)
-    if self.added_to_deck then
-        if self.ability.name == "Polydactyly" then
-            G.GAME.extra_gacha_pulls = (G.GAME.extra_gacha_pulls or 0)
-            G.GAME.extra_gacha_pulls = G.GAME.extra_gacha_pulls - 1
-        end
-    end
-    remove_from_deckref(self, from_debuff)
-end
-
 local openref = Card.open
 function Card.open(self)
     local temp = 0
+    local extra_pulls = 0
     if self.ability.set == "Booster" then
+        for _, v in ipairs(G.jokers.cards) do
+            if v.ability.name == "Polydactyly" then
+                extra_pulls = extra_pulls + 1
+            end
+        end
         self.config.center.config.choose = self.config.center.config.choose or 1
         temp = self.config.center.config.choose
-        self.config.center.config.choose = math.min(self.config.center.config.choose + G.GAME.extra_gacha_pulls,
+        self.config.center.config.choose = math.min(self.config.center.config.choose + extra_pulls,
             self.ability.extra)
     end
     openref(self)
@@ -413,5 +424,15 @@ function G.FUNCS.evaluate_play(self, e)
     end
 end
 
-----------------------------------------------
-------------MOD CODE END----------------------
+-- Options
+local draw_from_deck_to_handref = G.FUNCS.draw_from_deck_to_hand
+function G.FUNCS.draw_from_deck_to_hand(self, e)
+    draw_from_deck_to_handref(self, e)
+
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == "Options" and G.GAME.current_round.hands_played == v.ability.extra and G.STATE == G.STATES.DRAW_TO_HAND then
+            for i = 1, 2 do draw_card(G.deck, G.hand, i*100/2, 'up', true) end
+            v.ability.extra = v.ability.extra + 1
+        end
+    end
+end
