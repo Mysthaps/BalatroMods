@@ -1,5 +1,11 @@
 # Changelog
 
+## March 18th, 2024
+### **[Repo]**
+- Added **MystBlinds** to ``Balamod``
+- Added ``Infodumps``, which contains information about **MystJokers** and **MystBlinds**
+- Added images to ``Jokers.md``
+
 ## March 13th, 2024
 ### **[MystJokers]**
 - Added **Options**
