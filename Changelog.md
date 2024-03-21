@@ -1,6 +1,7 @@
 # Changelog
 
 ## March 21st, 2024
+### **[Repo]**
 - Added **MystBlinds** to ``Steamodded``
 - Mods can now be downloaded individually [here](https://github.com/Mysthaps/BalatroMods/releases/tag/Steamodded)
   - Balamod mods can be downloaded via its Marketplace
