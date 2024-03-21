@@ -235,7 +235,7 @@ table.insert(mods,
                         dollars = 8, mult = 2, 
                         vars = {}, debuff = {}, 
                         pos = {x = 0, y = 4}, atlas = "MystBlinds",
-                        boss = {showdown = false, min = 1, max = 10},
+                        boss = {showdown = true, min = 10, max = 10},
                         boss_colour = HEX('404040')
                     }
                 }
