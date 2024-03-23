@@ -30,7 +30,7 @@ local localization = {
         name = "The Insect",
         text = {
             "Debuff leftmost Joker",
-            "each hand"
+            "whenever cards are drawn"
         }
     },
     bl_noir_silence = {
@@ -133,7 +133,7 @@ function Blind.set_blind(self, blind, reset, silent)
             G.hand:change_size(-self.hands_sub)
         end
         if self.name == "The Monster" then
-            self.hands_sub = 0
+            G.GAME.consumeable_buffer = 0
             
             ---- check for Chicot
             local has_chicot = false
@@ -141,12 +141,14 @@ function Blind.set_blind(self, blind, reset, silent)
                 if v.ability.name == "Chicot" then has_chicot = true end
             end
 
-            for k, v in ipairs(G.consumeables.cards) do
-                if (not v.edition) or (v.edition and not v.edition.negative) then self.hands_sub = self.hands_sub + 1 end
-                if not has_chicot then v:start_dissolve(nil, (k ~= 1)) end
-            end
+            if not has_chicot then
+                for k, v in ipairs(G.consumeables.cards) do
+                    v:start_dissolve(nil, (k ~= 1))
+                end
 
-            G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.hands_sub
+                self.hands_sub = G.consumeables.config.card_limit
+                G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.hands_sub
+            end
         end
     end
 end

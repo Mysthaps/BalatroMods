@@ -1,5 +1,15 @@
 # Changelog
 
+## March 23rd, 2024
+### **[MystBlinds]**
+- **Cartomancer** no longer generate cards during **The Monster**
+- Reworded **The Insect**: *after each hand* > *whenever cards are drawn*
+  - Actual effect unchanged
+- Changed version to **v1.0.1** for ``Balamod``
+### **[Repo]**
+- Separated **MystBlinds** and **BlindCollectionPatch**
+  - ``MystBlinds.zip`` in **Releases** still have both bundled
+
 ## March 21st, 2024
 ### **[Repo]**
 - Added **MystBlinds** to ``Steamodded``

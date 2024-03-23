@@ -34,7 +34,7 @@
 - **Reward**: $$$$$
 - **Required Score**: **X2** Base
 - **Minimum Ante**: 3
-- **Description**: *Debuff leftmost Joker after each hand*
+- **Description**: *Debuff leftmost Joker whenever cards are drawn*
 
 (It will always target the Joker on the first slot, even if it is debuffed.)
 

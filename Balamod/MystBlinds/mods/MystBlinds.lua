@@ -9,7 +9,7 @@ table.insert(mods,
         mod_id = "myst_blinds",
         name = "Myst's Boss Blinds",
         author = "Mysthaps",
-        version = "0.1",
+        version = "v1.0.1",
         description = {
             "A pack of Blinds",
         },
@@ -39,20 +39,22 @@ table.insert(mods,
                         G.hand:change_size(-self.hands_sub)
                     end
                     if self.name == "The Monster" then
-                        self.hands_sub = 0
-                        
+                        G.GAME.consumeable_buffer = 0
+            
                         ---- check for Chicot
                         local has_chicot = false
                         for _, v in ipairs(G.jokers.cards) do
                             if v.ability.name == "Chicot" then has_chicot = true end
                         end
-            
-                        for k, v in ipairs(G.consumeables.cards) do
-                            if (not v.edition) or (v.edition and not v.edition.negative) then self.hands_sub = self.hands_sub + 1 end
-                            if not has_chicot then v:start_dissolve(nil, (k ~= 1)) end
-                        end
 
-                        G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.hands_sub
+                        if not has_chicot then
+                            for k, v in ipairs(G.consumeables.cards) do
+                                v:start_dissolve(nil, (k ~= 1))
+                            end
+
+                            self.hands_sub = G.consumeables.config.card_limit
+                            G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.hands_sub
+                        end
                     end
                 end
             ]]
@@ -175,7 +177,7 @@ table.insert(mods,
                         name = "The Insect",
                         text = {
                             "Debuff leftmost Joker",
-                            "each hand"
+                            "whenever cards are drawn"
                         }
                     },
                     bl_noir_silence = {

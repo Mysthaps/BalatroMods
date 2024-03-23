@@ -5,6 +5,7 @@ A collection of mods made by Myst for the game Balatro.
 - **RandomSprite**: Randomizes the sprites of all Jokers, Vouchers, Boosters and comsumables.
 - **YippeeGameOver**: Replaces Jimbo in the win screen with tbh
 - **MystBlinds**: Adds more Blinds to the game.
+- **BlindCollectionPatch**: A patch that allows custom Blind sprites to be shown in some UI elements and the Collection.
 
 Joker credits can be found in ``Infodumps\Jokers.md``\
 Yippee Joker sprite by C_rry\
