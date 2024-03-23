@@ -5,6 +5,7 @@
 - **Cartomancer** no longer generate cards during **The Monster**
 - Reworded **The Insect**: *after each hand* > *whenever cards are drawn*
   - Actual effect unchanged
+- Added a check for **BlindCollectionPatch** that makes the mod not load if the patch is not found
 - Changed version to **v1.0.1** for ``Balamod``
 ### **[Repo]**
 - Separated **MystBlinds** and **BlindCollectionPatch**

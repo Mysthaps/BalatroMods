@@ -96,6 +96,10 @@ local blinds = {
 }
 
 function SMODS.INIT.MystBlinds()
+    if not SMODS.findModByID("BlindCollectionPatch") then
+        sendDebugMessage("Cannot find BlindCollectionPatch, not loading MystBlinds...")
+        return
+    end
     sendDebugMessage("Loaded MystBlinds~")
 
     -- Localization
