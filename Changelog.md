@@ -1,5 +1,10 @@
 # Changelog
 
+## April 2nd, 2024
+### **[MystBlinds]**
+- Updated to ``Steamodded 0.9.2+``
+- Deprecated **BlindCollectionPatch** as Blinds API is now a thing
+
 ## March 23rd, 2024
 ### **[MystBlinds]**
 - **Cartomancer** no longer generate cards during **The Monster**

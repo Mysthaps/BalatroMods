@@ -43,117 +43,104 @@ local localization = {
 }
 
 local blinds = {
-    {
-        shorthand = "bl_market",
-        name = "The Market", 
-        defeated = false, discovered = true, alerted = true, 
-        dollars = 5, mult = 2, 
-        vars = {}, debuff = {}, 
-        pos = {x = 0, y = 0}, atlas = "MystBlinds",
-        boss = {min = 3, max = 10},
-        boss_colour = HEX('76C860')
-    },
-    {
-        shorthand = "bl_stone",
-        name = "The Stone", 
-        defeated = false, discovered = true, alerted = true, 
-        dollars = 5, mult = 2, 
-        vars = {}, debuff = {}, 
-        pos = {x = 0, y = 1}, atlas = "MystBlinds",
-        boss = {min = 2, max = 10},
-        boss_colour = HEX('85898C')
-    },
-    {
-        shorthand = "bl_monster",
-        name = "The Monster", 
-        defeated = false, discovered = true, alerted = true, 
-        dollars = 5, mult = 2, 
-        vars = {}, debuff = {}, 
-        pos = {x = 0, y = 2}, atlas = "MystBlinds",
-        boss = {min = 2, max = 10},
-        boss_colour = HEX('3C074D')
-    },
-    {
-        shorthand = "bl_insect",
-        name = "The Insect", 
-        defeated = false, discovered = true, alerted = true, 
-        dollars = 5, mult = 2, 
-        vars = {}, debuff = {}, 
-        pos = {x = 0, y = 3}, atlas = "MystBlinds",
-        boss = {min = 3, max = 10},
-        boss_colour = HEX('873E2C')
-    },
-    {
-        shorthand = "bl_noir_silence",
-        name = "Noir Silence", 
-        defeated = false, discovered = true, alerted = true, 
-        dollars = 8, mult = 2, 
-        vars = {}, debuff = {}, 
-        pos = {x = 0, y = 4}, atlas = "MystBlinds",
-        boss = {showdown = true, min = 10, max = 10},
-        boss_colour = HEX('404040')
-    }
+    -- SMODS.Blind:new(name, slug, loc_txt, dollars, mult, vars, debuff, pos, boss, boss_colour, defeated, atlas)
+    SMODS.Blind:new(
+        "The Market", "market", localization.bl_market,
+        5, 2, 
+        {}, {},
+        {x = 0, y = 0}, {min = 3, max = 10},
+        HEX('76C860'), true, "MystBlinds"
+    ),
+    SMODS.Blind:new(
+        "The Stone", "stone", localization.bl_stone,
+        5, 2, 
+        {}, {},
+        {x = 0, y = 1}, {min = 2, max = 10},
+        HEX('85898C'), true, "MystBlinds"
+    ),
+    SMODS.Blind:new(
+        "The Monster", "monster", localization.bl_monster,
+        5, 2, 
+        {}, {},
+        {x = 0, y = 2}, {min = 2, max = 10},
+        HEX('3C074D'), true, "MystBlinds"
+    ),
+    SMODS.Blind:new(
+        "The Insect", "insect", localization.bl_insect,
+        5, 2, 
+        {}, {},
+        {x = 0, y = 3}, {min = 3, max = 10},
+        HEX('873E2C'), true, "MystBlinds"
+    ),
+    SMODS.Blind:new(
+        "Noir Silence", "noir_silence", localization.bl_noir_silence,
+        8, 2, 
+        {}, {},
+        {x = 0, y = 4}, {showdown = true, min = 10, max = 10},
+        HEX('404040'), true, "MystBlinds"
+    ),
 }
 
 function SMODS.INIT.MystBlinds()
-    if not SMODS.findModByID("BlindCollectionPatch") then
-        sendDebugMessage("Cannot find BlindCollectionPatch, not loading MystBlinds...")
-        return
-    end
     sendDebugMessage("Loaded MystBlinds~")
 
-    -- Localization
-    for k, v in pairs(localization) do
-        G.localization.descriptions.Blind[k] = v
-    end
-    init_localization()
-
     -- Blinds
-    for k, v in ipairs(blinds) do
-        local blind = v
-        blind.key = v.shorthand
-
-        blind.order = 30 + k
-        G.P_BLINDS[v.shorthand] = blind
+    for _, v in ipairs(blinds) do
+        v:register()
     end
 
     -- Sprites
     SMODS.Sprite:new("MystBlinds", SMODS.findModByID("MystBlinds").path, "MystBlinds.png", 34, 34, "animation_atli", 21):register()
-end
 
----- Blind:set_blind // The Market, The Monster, Noir Silence
-local set_blindref = Blind.set_blind
-function Blind.set_blind(self, blind, reset, silent)
-    set_blindref(self, blind, reset, silent)
-    if not reset then
-        if self.name == "The Market" then
-            self.prepped = nil
-            self.discards_sub = 1
+    -- Blinds
+    ---- The Market
+    SMODS.Blinds.bl_market.set = function(self, blind, reset, silent)
+        self.prepped = nil
+        self.discards_sub = 1
+    end
+
+    ---- The Stone
+
+    ---- The Monster
+    SMODS.Blinds.bl_monster.set = function(self, blind, reset, silent)
+        G.GAME.consumeable_buffer = 0
+
+        ---- check for Chicot
+        local has_chicot = false
+        for _, v in ipairs(G.jokers.cards) do
+            if v.ability.name == "Chicot" then has_chicot = true end
         end
-        if self.name == "Noir Silence" then
-            self.prepped = nil
-            self.discards_sub = 1
-            self.hands_sub = math.min(G.hand.config.card_limit - 1, 4)
-            G.hand:change_size(-self.hands_sub)
-        end
-        if self.name == "The Monster" then
-            G.GAME.consumeable_buffer = 0
-            
-            ---- check for Chicot
-            local has_chicot = false
-            for _, v in ipairs(G.jokers.cards) do
-                if v.ability.name == "Chicot" then has_chicot = true end
+
+        if not has_chicot then
+            for k, v in ipairs(G.consumeables.cards) do
+                v:start_dissolve(nil, (k ~= 1))
             end
 
-            if not has_chicot then
-                for k, v in ipairs(G.consumeables.cards) do
-                    v:start_dissolve(nil, (k ~= 1))
-                end
-
-                self.hands_sub = G.consumeables.config.card_limit
-                G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.hands_sub
-            end
+            self.hands_sub = G.consumeables.config.card_limit
+            G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.hands_sub
         end
+    end
+    SMODS.Blinds.bl_monster.disable = function(self)
+        G.consumeables.config.card_limit = G.consumeables.config.card_limit + self.hands_sub
+    end
+    SMODS.Blinds.bl_monster.defeat = function(self, silent)
+        G.consumeables.config.card_limit = G.consumeables.config.card_limit + self.hands_sub
+    end
+
+    ---- The Insect
+
+    ---- Noir Silence
+    SMODS.Blinds.bl_noir_silence.set = function(self, blind, reset, silent)
+        self.prepped = nil
+        self.discards_sub = 1
+        self.hands_sub = math.min(G.hand.config.card_limit - 1, 4)
+        G.hand:change_size(-self.hands_sub)
+    end
+    SMODS.Blinds.bl_noir_silence.disable = function(self)
+        G.hand:change_size(self.hands_sub)
+    end
+    SMODS.Blinds.bl_noir_silence.defeat = function(self, silent)
+        G.hand:change_size(self.hands_sub)
     end
 end
 
@@ -180,29 +167,6 @@ function Blind.debuff_card(self, card, from_blind)
     end
 end
 
----- Blind:disable // The Monster, Noir Silence
-local disableref = Blind.disable
-function Blind.disable(self)
-    disableref(self)
-    if self.name == "The Monster" then
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit + self.hands_sub
-    end
-    if self.name == "Noir Silence" then
-        G.hand:change_size(self.hands_sub)
-    end
-end
-
----- Blind:defeat // The Monster, Noir Silence
-local defeatref = Blind.defeat
-function Blind.defeat(self, silent)
-    defeatref(self, silent)
-    if self.name == "The Monster" and not self.disabled then
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit + self.hands_sub
-    end
-    if self.name == "Noir Silence" and not self.disabled then
-        G.hand:change_size(self.hands_sub)
-    end
-end
 
 ---- Blind:drawn_to_hand // The Market, Noir Silence, The Insect
 local drawn_to_handref = Blind.drawn_to_hand
