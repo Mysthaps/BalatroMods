@@ -1,9 +1,11 @@
 # Changelog
 
 ## April 2nd, 2024
-### **[MystBlinds]**
-- Updated to ``Steamodded 0.9.2+``
-- Deprecated **BlindCollectionPatch** as Blinds API is now a thing
+### **[MystBlinds | Steamodded]**
+- Updated to ``0.9.2+``
+- Deprecated **BlindCollectionPatch**
+### **[MystAprilFools]**
+- idk how it got here
 
 ## March 23rd, 2024
 ### **[MystBlinds]**
