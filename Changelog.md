@@ -1,5 +1,9 @@
 # Changelog
 
+## April 3rd, 2024
+### **[MystAprilFools]**
+- ``blind_overwrite`` now no longer randomizes into **Small Blind** or **Big Blind**
+
 ## April 2nd, 2024
 ### **[MystBlinds | Steamodded]**
 - Updated to ``0.9.2+``
