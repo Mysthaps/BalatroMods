@@ -52,7 +52,9 @@ function Blind.set_blind(self, blind, reset, silent)
 
                 local keys = {}
                 for k in pairs(G.P_BLINDS) do
-                    table.insert(keys, k)
+                    if k ~= "bl_small" and k ~= "bl_big" then
+                        table.insert(keys, k)
+                    end
                 end
                 local chosen_blind = pseudorandom_element(keys, pseudoseed('boss_select'))
                 blind = copy_table(G.P_BLINDS[chosen_blind])
