@@ -1,5 +1,23 @@
 # Changelog
 
+## April 5th, 2024
+*(at literally 12am)*
+### **[MystJokers]**
+- Updated to ``0.9.5``
+- Rewrote a bunch of code
+- **Miracle Milk**: Cost **$5** > **$3**
+- **Yield My Flesh**: No longer renames itself due to unsupported by API
+- **Autism Creature**: Cost **$5** > **$4**
+- **R Key**:
+  - No longer disables all future copies
+  - Antes reduced **3** > **2**
+- **Lucky Seven**: 
+  - Cost **$4** > **$3**
+  - Now compatible with **Blueprint**
+- **Options**: 
+  - Cost **$4** > **$5**
+  - Now correctly shows as incompatible with **Blueprint**
+
 ## April 3rd, 2024
 ### **[MystAprilFools]**
 - ``blind_overwrite`` now no longer randomizes into **Small Blind** or **Big Blind**

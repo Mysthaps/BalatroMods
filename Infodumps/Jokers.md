@@ -10,7 +10,7 @@
 # Miracle Milk
 ![Miracle Milk](./sprites/j_miracle_milk.png)
 - **Rarity**: Common
-- **Base Cost**: $5
+- **Base Cost**: $3
 - Incompatible with **Blueprint**
 - **Description**: **Debuffed** cards count for scoring
 
@@ -24,15 +24,14 @@ When a Debuffed card is played, it will be undebuffed before calculations occur.
 - **Base Cost**: $7
 - **Description**: **X2.5** Mult after first played hand scores less than **5%** of required chips
 
-Does not trigger on the first hand.\
-While active, the Joker's name changes to **To Claim Their Bones**.
+Does not trigger XMult on the first hand.
 
 *have never fought Bamboo-hatted Kim on Urban Nightmare... screw General Invitations tbh*
 
 # Autism Creature
 ![Autism Creature](./sprites/j_autism_creature.png)
 - **Rarity**: Common
-- **Base Cost**: $5
+- **Base Cost**: $4
 - **Description**: **+6** Mult for each empty **Joker** slot
 
 Does not count itself as an empty Joker slot. However, it will count **Joker Stencil**.
@@ -45,18 +44,16 @@ Does not count itself as an empty Joker slot. However, it will count **Joker Ste
 - **Base Cost**: $15
 - Incompatible with **Blueprint**
 - Incompatible with **Eternal**
-- **Description**: Sell this Joker to reduce Ante by **3**, down to minimum Ante **1**. All future **R Keys** will not work once sold
+- **Description**: Sell this Joker to reduce Ante by **2**, down to minimum Ante **1**
 
-Has +84 extra cost, bringing the buying cost up to 99.\
-After an **R Key** is sold, other **R Keys** will be debuffed when they are sold.
+Has +84 extra cost, bringing the buying cost up to 99.
 
 *Art from The Binding of Isaac: Repentance. Originally a standalone mod that reduces Ante by 10 instead. Quite balanced.*
 
 # Lucky Seven
 ![Lucky Seven](./sprites/j_lucky_seven.png)
 - **Rarity**: Common
-- **Base Cost**: $4
-- Incompatible with **Blueprint**
+- **Base Cost**: $3
 - **Description**: When **Blind** is selected, lose **$3** and use **The Wheel of Fortune** *(if possible)*
 
 Can make you go into debt.\
@@ -67,7 +64,7 @@ Does not take money or use **The Wheel of Fortune** if all Jokers have an editio
 # Options
 ![Options](./sprites/j_options.png)
 - **Rarity**: Common
-- **Base Cost**: $4
+- **Base Cost**: $5
 - Incompatible with **Blueprint**
 - **Description**: After playing a hand, draw **two** extra cards
 

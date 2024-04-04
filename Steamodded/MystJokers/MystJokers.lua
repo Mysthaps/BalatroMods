@@ -3,9 +3,19 @@
 --- MOD_ID: MystJokers
 --- MOD_AUTHOR: [Mysthaps]
 --- MOD_DESCRIPTION: A pack of Jokers
+--- DISPLAY_NAME: MystJokers
+--- BADGE_COLOUR: EDA9D3
 
-----------------------------------------------
-------------MOD CODE -------------------------
+-- Blacklist individual Jokers here
+local jokerBlacklists = {
+    polydactyly = false,
+    miracle_milk = false,
+    yield_flesh = false,
+    autism_creature = false,
+    r_key = false,
+    lucky_seven = false,
+    options = false
+}
 
 local localization = {
     polydactyly = {
@@ -41,10 +51,9 @@ local localization = {
     r_key = {
         name = "R Key",
         text = {
-            "Sell this Joker to reduce Ante",
-            "by {C:attention}3{}, down to minimum Ante {C:attention}1{}",
-            "All future {C:attention}R Keys{}",
-            "will not work once sold"
+            "Sell this Joker to",
+            "reduce Ante by {C:attention}2{},",
+            "down to minimum Ante {C:attention}1{}",
         }
     },
     lucky_seven = {
@@ -52,7 +61,7 @@ local localization = {
         text = {
             "When {C:attention}Blind{} is selected,",
             "lose {C:money}$3{} and use",
-            "{C:attention, T:c_wheel_of_fortune}The Wheel of Fortune{}",
+            "{C:attention}The Wheel of Fortune{}",
             "{s:0.8}(if possible){}",
         }
     },
@@ -65,182 +74,161 @@ local localization = {
     },
 }
 
---[[SMODS.Joker:new(
-    name, slug,
-    config,
-    spritePos, loc_txt,
-    rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat
-)
+--[[
 ]]
-local jokers = {
-    polydactyly = SMODS.Joker:new(
-        "Polydactyly", "",
-        {},
-        {}, "",
-        2, 6, true, true, false, true
-    ),
-    miracle_milk = SMODS.Joker:new(
-        "Miracle Milk", "",
-        {},
-        {}, "",
-        1, 5, true, true, false, true
-    ),
-    yield_flesh = SMODS.Joker:new(
-        "Yield My Flesh", "",
-        { extra = { Xmult = 2.5, active = false } },
-        {}, "",
-        2, 7, true, true, true, true
-    ),
-    autism_creature = SMODS.Joker:new(
-        "Autism Creature", "",
-        { extra = 0 },
-        {}, "",
-        1, 5, true, true, true, true
-    ),
-    r_key = SMODS.Joker:new(
-        "R Key", "",
-        {},
-        {}, "",
-        3, 15, true, true, false, false
-    ),
-    lucky_seven = SMODS.Joker:new(
-        "Lucky Seven", "",
-        {},
-        {}, "",
-        1, 4, true, true, false, true
-    ),
-    options = SMODS.Joker:new(
-        "Options", "",
-        { extra = 1 },
-        {}, "",
-        1, 4, true, true, true, true
-    ),
-}
-
--- Blacklist individual Jokers here
-local jokerBlacklists = {
-    polydactyly = false,
-    miracle_milk = false,
-    yield_flesh = false,
-    autism_creature = false,
-    r_key = false,
-    lucky_seven = false,
-    options = false
-}
 
 function SMODS.INIT.MystJokers()
-    sendDebugMessage("Loaded MystJokers~")
+    local jokers = {
+        {
+            name = "Polydactyly", slug = "polydactyly",
+            config = {}, rarity = 2, cost = 6, 
+            blueprint_compat = false, 
+            eternal_compat = true
+        },
+        {
+            name = "Miracle Milk", slug = "miracle_milk",
+            config = {}, rarity = 1, cost = 3, 
+            blueprint_compat = false, 
+            eternal_compat = true
+        },
+        {
+            name = "Yield My Flesh", slug = "yield_flesh",
+            config = {extra = { Xmult = 2.5, active = false }},
+            rarity = 2, cost = 7, 
+            blueprint_compat = true, 
+            eternal_compat = true
+        },
+        {
+            name = "Autism Creature", slug = "autism_creature",
+            config = {extra = 0}, rarity = 1, cost = 4, 
+            blueprint_compat = true, 
+            eternal_compat = true
+        },
+        {
+            name = "R Key", slug = "r_key",
+            config = {}, rarity = 3, cost = 15, 
+            blueprint_compat = false, 
+            eternal_compat = false
+        },
+        {
+            name = "Lucky Seven", slug = "lucky_seven",
+            config = {}, rarity = 1, cost = 3, 
+            blueprint_compat = true, 
+            eternal_compat = true
+        },
+        {
+            name = "Options", slug = "options",
+            config = {extra = 1}, rarity = 1, cost = 5, 
+            blueprint_compat = false, 
+            eternal_compat = true
+        },
+    }
 
     -- Localization
     G.localization.misc.dictionary.k_cleansed = "Cleansed!"
     G.localization.misc.dictionary.k_wheel = "Wheel!"
-    G.localization.descriptions.Joker.j_claim_bones = {
-        name = "To Claim Their Bones",
-        text = {
-            "{X:mult,C:white} X2.5 {} Mult after first played",
-            "hand scores less than",
-            "{C:attention}5%{} of required chips"
-        }
-    }
     init_localization()
 
     -- Add Jokers to center
-    for k, v in pairs(jokers) do
-        if not jokerBlacklists[k] then
-            v.slug = "j_" .. k
-            v.loc_txt = localization[k]
-            v.spritePos = { x = 0, y = 0 }
-            v:register()
-            SMODS.Sprite:new(v.slug, SMODS.findModByID("MystJokers").path, v.slug..".png", 71, 95, "asset_atli"):register()
+    for _, v in ipairs(jokers) do
+        if not jokerBlacklists[v.slug] then
+            SMODS.Joker:new(v.name, v.slug, v.config, {x = 0, y = 0}, localization[v.slug], v.rarity, v.cost, true, true, v.blueprint_compat, v.eternal_compat):register()
+            SMODS.Sprite:new('j_'..v.slug, SMODS.findModByID("MystJokers").path, "j_"..v.slug..".png", 71, 95, "asset_atli"):register()
         end
     end
 
     --- Lame joker abilities ---
     -- Miracle Milk
-    SMODS.Jokers.j_miracle_milk.calculate = function(self, context)
-        if context.cardarea == G.jokers and context.before and not context.blueprint then
-            for _, v in ipairs(context.full_hand) do
-                local cleanses = 0
-                if v.debuff then
-                    cleanses = cleanses + 1
-                    v.debuff = false
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            v:juice_up()
-                            return true
-                        end
-                    }))
-                end
+    if not jokerBlacklists.miracle_milk then
+        SMODS.Jokers.j_miracle_milk.calculate = function(self, context)
+            if context.cardarea == G.jokers and context.before and not context.blueprint then
+                for _, v in ipairs(context.full_hand) do
+                    local cleanses = 0
+                    if v.debuff then
+                        cleanses = cleanses + 1
+                        v.debuff = false
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                v:juice_up()
+                                return true
+                            end
+                        }))
+                    end
 
-                if cleanses > 0 then
-                    return {
-                        message = localize('k_cleansed'),
-                        colour = G.C.JOKER_GREY,
-                        card = self
-                    }
+                    if cleanses > 0 then
+                        return {
+                            message = localize('k_cleansed'),
+                            colour = G.C.JOKER_GREY,
+                            card = self
+                        }
+                    end
                 end
             end
         end
     end
 
     -- Yield My Flesh
-    SMODS.Jokers.j_yield_flesh.calculate = function(self, context)
-        if context.first_hand_drawn then
-            local eval = function() return G.GAME.current_round.hands_played == 0 end
-            juice_card_until(self, eval, true)
-        end
-
-        if context.scored_chips and context.after and not context.blueprint then
-            if G.GAME.current_round.hands_played == 0 and context.scored_chips / G.GAME.blind.chips <= 0.05 then
-                self.ability.extra.active = true
-                return {
-                    message = localize('k_active_ex'),
-                    colour = G.C.FILTER
-                }
+    if not jokerBlacklists.yield_flesh then 
+        SMODS.Jokers.j_yield_flesh.calculate = function(self, context)
+            if context.first_hand_drawn then
+                local eval = function() return G.GAME.current_round.hands_played == 0 end
+                juice_card_until(self, eval, true)
             end
-        end
 
-        if context.end_of_round and not context.blueprint then
-            self.ability.extra.active = false
-        end
+            if context.scored_chips and context.after and not context.blueprint then
+                if G.GAME.current_round.hands_played == 0 and context.scored_chips / G.GAME.blind.chips <= 0.05 then
+                    self.ability.extra.active = true
+                    return {
+                        message = localize('k_active_ex'),
+                        colour = G.C.FILTER
+                    }
+                end
+            end
 
-        if SMODS.end_calculate_context(context) then
-            if self.ability.extra.active then
-                return {
-                    message = localize { type = 'variable', key = 'a_xmult', vars = { self.ability.extra.Xmult } },
-                    Xmult_mod = self.ability.extra.Xmult,
-                }
+            if context.end_of_round and not context.blueprint then
+                self.ability.extra.active = false
+            end
+
+            if SMODS.end_calculate_context(context) then
+                if self.ability.extra.active then
+                    return {
+                        message = localize { type = 'variable', key = 'a_xmult', vars = { self.ability.extra.Xmult } },
+                        Xmult_mod = self.ability.extra.Xmult,
+                    }
+                end
             end
         end
     end
 
     -- Autism Creature
-    SMODS.Jokers.j_autism_creature.calculate = function(self, context)
-        if SMODS.end_calculate_context(context) then
-            if self.ability.extra > 0 then
-                return {
-                    message = localize { type = 'variable', key = 'a_mult', vars = { self.ability.extra } },
-                    mult_mod = self.ability.extra,
-                }
+    if not jokerBlacklists.autism_creature then
+        SMODS.Jokers.j_autism_creature.calculate = function(self, context)
+            if SMODS.end_calculate_context(context) then
+                if self.ability.extra > 0 then
+                    return {
+                        message = localize { type = 'variable', key = 'a_mult', vars = { self.ability.extra } },
+                        mult_mod = self.ability.extra,
+                    }
+                end
             end
+        end
+
+        SMODS.Jokers.j_autism_creature.loc_def = function(self)
+            return { self.ability.extra }
         end
     end
 
     -- R Key
-    SMODS.Jokers.j_r_key.effect = function(self, context)
-        self.ability.extra_cost = (self.ability.extra_cost or 0) + 84
-    end
+    if not jokerBlacklists.r_key then
+        SMODS.Jokers.j_r_key.set_ability = function(self, context)
+            self.ability.extra_cost = (self.ability.extra_cost or 0) + 84
+        end
 
-    SMODS.Jokers.j_r_key.calculate = function(self, context)
-        if context.selling_self then
-            if G.GAME.used_rkey then
-                self:set_debuff(true)
-            else
-                G.GAME.used_rkey = true
-
+        SMODS.Jokers.j_r_key.calculate = function(self, context)
+            if context.selling_self then
                 G.E_MANAGER:add_event(Event({
                     func = (function()
-                        for _ = 1, 3 do
+                        for _ = 1, 2 do
                             if G.GAME.round_resets.blind_ante <= 1 or G.GAME.round_resets.ante <= 1 then break end
 
                             ease_ante(-1)
@@ -258,122 +246,46 @@ function SMODS.INIT.MystJokers()
     end
 
     -- Lucky Seven
-    SMODS.Jokers.j_lucky_seven.calculate = function(self, context)
-        if context.setting_blind and not self.getting_sliced and not context.blueprint then
-            local can_trigger = false
-            for _, v in pairs(G.jokers.cards) do
-                if v.ability.set == "Joker" and not v.edition then
-                    can_trigger = true
+    if not jokerBlacklists.lucky_seven then
+        SMODS.Jokers.j_lucky_seven.calculate = function(self, context)
+            if context.setting_blind and not self.getting_sliced then
+                local can_trigger = false
+                for _, v in pairs(G.jokers.cards) do
+                    if v.ability.set == "Joker" and not v.edition then
+                        can_trigger = true
+                    end
                 end
-            end
 
-            if can_trigger then
-                local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W/2, G.play.T.y + G.play.T.h/2-G.CARD_H/2, G.CARD_W, G.CARD_H, 
-                G.P_CARDS.empty, G.P_CENTERS["c_wheel_of_fortune"], {bypass_discovery_center = true, bypass_discovery_ui = true})
-                card.cost = 0
-                card:update()
-                G.FUNCS.use_card({config = {ref_table = card}})
-                card:start_materialize()
+                if can_trigger then
+                    local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W/2, G.play.T.y + G.play.T.h/2-G.CARD_H/2, G.CARD_W, G.CARD_H, 
+                    G.P_CARDS.empty, G.P_CENTERS["c_wheel_of_fortune"], {bypass_discovery_center = true, bypass_discovery_ui = true})
+                    card.cost = 0
+                    card:update()
+                    G.FUNCS.use_card({config = {ref_table = card}})
+                    card:start_materialize()
 
-                ease_dollars(-3)
+                    ease_dollars(-3)
+                end
             end
         end
     end
 
     -- Options
-    SMODS.Jokers.j_options.effect = function(self, context)
-        self.ability.extra = G.GAME.current_round.hands_played + 1
-    end
+    if not jokerBlacklists.options then
+        SMODS.Jokers.j_options.set_ability = function(self, context)
+            self.ability.extra = G.GAME.current_round.hands_played + 1
+        end
 
-    SMODS.Jokers.j_options.calculate = function(self, context)
-        if context.setting_blind and not self.getting_sliced and not context.blueprint then
-            self.ability.extra = 1
+        SMODS.Jokers.j_options.calculate = function(self, context)
+            if context.setting_blind and not self.getting_sliced and not context.blueprint then
+                self.ability.extra = 1
+            end
         end
     end
+    sendDebugMessage("Loaded MystJokers~")
 end
 
 --- the good shit ---
-
--- Init variables
-local init_game_objectobjref = Game.init_game_object
-function Game.init_game_object(self)
-    local gameObj = init_game_objectobjref(self)
-
-    gameObj.used_rkey = false
-
-    return gameObj
-end
-
--- UIBox garbage / Copied from LushMod. Thanks luscious!
-local generate_UIBox_ability_tableref = Card.generate_UIBox_ability_table
-function Card.generate_UIBox_ability_table(self)
-    local card_type, hide_desc = self.ability.set or "None", nil
-    local loc_vars = nil
-    local main_start, main_end = nil, nil
-    local no_badge = nil
-
-    if self.config.center.unlocked == false and not self.bypass_lock then    -- For everyting that is locked
-    elseif card_type == 'Undiscovered' and not self.bypass_discovery_ui then -- Any Joker or tarot/planet/voucher that is not yet discovered
-    elseif self.debuff then
-    elseif card_type == 'Default' or card_type == 'Enhanced' then
-    elseif self.ability.set == 'Joker' then
-        local customJoker = false
-
-        if self.ability.name == 'Polydactyly' then
-            customJoker = true
-        elseif self.ability.name == 'Miracle Milk' then
-            customJoker = true
-        elseif self.ability.name == 'Yield My Flesh' then
-            customJoker = true
-        elseif self.ability.name == 'Autism Creature' then
-            loc_vars = { self.ability.extra }
-            customJoker = true
-        elseif self.ability.name == "Lucky Seven" then
-            customJoker = true
-        elseif self.ability.name == "Draw Two" then
-            customJoker = true
-        end
-
-        if customJoker then
-            local badges = {}
-            if (card_type ~= 'Locked' and card_type ~= 'Undiscovered' and card_type ~= 'Default') or self.debuff then
-                badges.card_type = card_type
-            end
-            if self.ability.set == 'Joker' and self.bypass_discovery_ui and (not no_badge) then
-                badges.force_rarity = true
-            end
-            if self.edition then
-                if self.edition.type == 'negative' and self.ability.consumeable then
-                    badges[#badges + 1] = 'negative_consumable'
-                else
-                    badges[#badges + 1] = (self.edition.type == 'holo' and 'holographic' or self.edition.type)
-                end
-            end
-            if self.seal then
-                badges[#badges + 1] = string.lower(self.seal) .. '_seal'
-            end
-            if self.ability.eternal then
-                badges[#badges + 1] = 'eternal'
-            end
-            if self.pinned then
-                badges[#badges + 1] = 'pinned_left'
-            end
-
-            if self.sticker then
-                loc_vars = loc_vars or {};
-                loc_vars.sticker = self.sticker
-            end
-
-            local center = self.config.center
-            if self.ability.name == "Yield My Flesh" or self.ability.name == "To Claim Their Bones" then
-                center.key = self.ability.extra.active and 'j_claim_bones' or 'j_yield_flesh'
-            end
-            return generate_card_ui(center, nil, loc_vars, card_type, badges, hide_desc, main_start, main_end)
-        end
-    end
-    return generate_UIBox_ability_tableref(self)
-end
-
 -- Card updates
 local card_updateref = Card.update
 function Card.update(self, dt)
