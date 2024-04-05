@@ -10,11 +10,10 @@
 # Miracle Milk
 ![Miracle Milk](./sprites/j_miracle_milk.png)
 - **Rarity**: Common
-- **Base Cost**: $3
-- Incompatible with **Blueprint**
-- **Description**: **Debuffed** cards count for scoring
+- **Base Cost**: $4
+- **Description**: **Undebuff** all scored cards, **+8** Chips per **undebuffed** card
 
-When a Debuffed card is played, it will be undebuffed before calculations occur.
+When a debuffed card is scored, it will be undebuffed before calculations occur.
 
 *Painful Death for the Lactose Intolerant, struggle 'till your last moment!*
 
@@ -26,17 +25,7 @@ When a Debuffed card is played, it will be undebuffed before calculations occur.
 
 Does not trigger XMult on the first hand.
 
-*have never fought Bamboo-hatted Kim on Urban Nightmare... screw General Invitations tbh*
-
-# Autism Creature
-![Autism Creature](./sprites/j_autism_creature.png)
-- **Rarity**: Common
-- **Base Cost**: $4
-- **Description**: **+6** Mult for each empty **Joker** slot
-
-Does not count itself as an empty Joker slot. However, it will count **Joker Stencil**.
-
-*Art by C_rry, modified by me. yippeeeee!!!!!!!*
+*get distorted L*
 
 # R Key
 ![R Key](./sprites/j_r_key.png)
@@ -63,7 +52,7 @@ Does not take money or use **The Wheel of Fortune** if all Jokers have an editio
 
 # Options
 ![Options](./sprites/j_options.png)
-- **Rarity**: Common
+- **Rarity**: Uncommon
 - **Base Cost**: $5
 - Incompatible with **Blueprint**
 - **Description**: After playing a hand, draw **two** extra cards
@@ -72,3 +61,35 @@ Can go over hand size limit.\
 Discarding will not draw extra cards past the hand size limit.
 
 *Unlimited flexibility*
+
+# Credits
+![Credits](./sprites/j_credits.png)
+- **Rarity**: Uncommon
+- **Base Cost**: $5
+- Incompatible with **Blueprint**
+- **Description**: After discarding, draw **two** extra cards
+
+Can go over hand size limit.\
+Playing a hand will not draw extra cards past the hand size limit.
+
+*Funding for this program was made possible by- by- by- by- by-*
+
+# Autism Creature
+![Autism Creature](./sprites/j_autism_creature.png)
+- **Rarity**: Common
+- **Base Cost**: $4
+- **Description**: **+6** Mult for each empty **Joker** slot
+
+Does not count itself as an empty Joker slot. However, it will count **Joker Stencil**.
+
+*Art by C_rry, modified by me. yippeeeee!!!!!!!*
+
+# Suspicious Joker
+![Jimpostor](./sprites/j_jimpostor.png)
+- **Rarity**: Uncommon
+- **Base Cost**: $7
+- **Description**: Downgrade played **poker hand** to gain **X0.25** Mult
+
+Played hand must be higher than level 1 for effect to activate.
+
+*Art by C_rry, modified by me. when the jester is skeptical!*

@@ -18,6 +18,17 @@
   - Cost **$4** > **$5**
   - Now correctly shows as incompatible with **Blueprint**
 
+*(and at 11pm)*
+### **[MystJokers]**
+- Added two new Jokers
+- **Yield My Flesh**: Cost **$7** > **$6**
+- **Miracle Milk**: 
+  - Effect changed, now "**Undebuff** all scored cards, **+8** Chips per **undebuffed** card"
+  - Cost **$3** > **$4**
+  - Now **Blueprint** compatible
+- **Options**: Rarity **Common** > **Uncommon**
+- **Lucky Seven**: Now shows extra information about **The Wheel of Fortune**
+
 ## April 3rd, 2024
 ### **[MystAprilFools]**
 - ``blind_overwrite`` now no longer randomizes into **Small Blind** or **Big Blind**

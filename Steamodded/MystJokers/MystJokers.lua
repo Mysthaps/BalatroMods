@@ -14,7 +14,9 @@ local jokerBlacklists = {
     autism_creature = false,
     r_key = false,
     lucky_seven = false,
-    options = false
+    options = false,
+    jimpostor = false,
+    credits = false,
 }
 
 local localization = {
@@ -28,8 +30,10 @@ local localization = {
     miracle_milk = {
         name = "Miracle Milk",
         text = {
-            "{C:attention}Debuffed{} cards count",
-            "for scoring"
+            "{C:attention}Undebuff{} all scored cards",
+            "{C:chips}+8{} Chips per",
+            "{C:attention}undebuffed{} card",
+            "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"
         }
     },
     yield_flesh = {
@@ -72,10 +76,22 @@ local localization = {
             "draw {C:attention}two{} extra cards"
         }
     },
+    jimpostor = {
+        name = "Suspicious Joker",
+        text = {
+            "Downgrade played {C:attention}poker hand{}",
+            "to gain {X:mult,C:white} X0.25 {} Mult",
+            "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)"
+        }
+    },
+    credits = {
+        name = "Credits",
+        text = {
+            "After discarding,",
+            "draw {C:attention}two{} extra cards"
+        }
+    }
 }
-
---[[
-]]
 
 function SMODS.INIT.MystJokers()
     local jokers = {
@@ -87,20 +103,14 @@ function SMODS.INIT.MystJokers()
         },
         {
             name = "Miracle Milk", slug = "miracle_milk",
-            config = {}, rarity = 1, cost = 3, 
-            blueprint_compat = false, 
+            config = {extra = 8}, rarity = 1, cost = 4, 
+            blueprint_compat = true, 
             eternal_compat = true
         },
         {
             name = "Yield My Flesh", slug = "yield_flesh",
             config = {extra = { Xmult = 2.5, active = false }},
-            rarity = 2, cost = 7, 
-            blueprint_compat = true, 
-            eternal_compat = true
-        },
-        {
-            name = "Autism Creature", slug = "autism_creature",
-            config = {extra = 0}, rarity = 1, cost = 4, 
+            rarity = 2, cost = 6, 
             blueprint_compat = true, 
             eternal_compat = true
         },
@@ -118,8 +128,26 @@ function SMODS.INIT.MystJokers()
         },
         {
             name = "Options", slug = "options",
-            config = {extra = 1}, rarity = 1, cost = 5, 
+            config = {extra = 1}, rarity = 2, cost = 4, 
             blueprint_compat = false, 
+            eternal_compat = true
+        },
+        {
+            name = "Credits", slug = "credits",
+            config = {extra = 1}, rarity = 2, cost = 4, 
+            blueprint_compat = false, 
+            eternal_compat = true
+        },
+        {
+            name = "Autism Creature", slug = "autism_creature",
+            config = {extra = 0}, rarity = 1, cost = 4, 
+            blueprint_compat = true, 
+            eternal_compat = true
+        },
+        {
+            name = "Suspicious Joker", slug = "jimpostor",
+            config = {}, rarity = 2, cost = 7, 
+            blueprint_compat = true, 
             eternal_compat = true
         },
     }
@@ -141,9 +169,9 @@ function SMODS.INIT.MystJokers()
     -- Miracle Milk
     if not jokerBlacklists.miracle_milk then
         SMODS.Jokers.j_miracle_milk.calculate = function(self, context)
-            if context.cardarea == G.jokers and context.before and not context.blueprint then
-                for _, v in ipairs(context.full_hand) do
-                    local cleanses = 0
+            if context.cardarea == G.jokers and context.before and context.scoring_hand and not context.blueprint then
+                local cleanses = 0
+                for _, v in ipairs(context.scoring_hand) do
                     if v.debuff then
                         cleanses = cleanses + 1
                         v.debuff = false
@@ -154,16 +182,29 @@ function SMODS.INIT.MystJokers()
                             end
                         }))
                     end
+                end
 
-                    if cleanses > 0 then
-                        return {
-                            message = localize('k_cleansed'),
-                            colour = G.C.JOKER_GREY,
-                            card = self
-                        }
-                    end
+                if cleanses > 0 then
+                    self.ability.extra = self.ability.extra + 8 * cleanses
+                    return {
+                        message = localize('k_cleansed'),
+                        colour = G.C.JOKER_GREY,
+                        card = self
+                    }
                 end
             end
+
+            if SMODS.end_calculate_context(context) then
+                return {
+                    message = localize{type='variable',key='a_chips',vars={self.ability.extra}},
+                    chip_mod = self.ability.extra, 
+                    colour = G.C.CHIPS
+                }
+            end
+        end
+
+        SMODS.Jokers.j_miracle_milk.loc_def = function(self)
+            return { self.ability.extra }
         end
     end
 
@@ -257,16 +298,27 @@ function SMODS.INIT.MystJokers()
                 end
 
                 if can_trigger then
-                    local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W/2, G.play.T.y + G.play.T.h/2-G.CARD_H/2, G.CARD_W, G.CARD_H, 
-                    G.P_CARDS.empty, G.P_CENTERS["c_wheel_of_fortune"], {bypass_discovery_center = true, bypass_discovery_ui = true})
-                    card.cost = 0
-                    card:update()
-                    G.FUNCS.use_card({config = {ref_table = card}})
-                    card:start_materialize()
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'after',
+                        delay = 0.5,
+                        func = function()
+                            local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W/2, G.play.T.y + G.play.T.h/2-G.CARD_H/2, G.CARD_W, G.CARD_H, 
+                            G.P_CARDS.empty, G.P_CENTERS["c_wheel_of_fortune"], {bypass_discovery_center = true, bypass_discovery_ui = true})
+                            card.cost = 0
+                            card:update()
+                            G.FUNCS.use_card({config = {ref_table = card}})
+                            card:start_materialize()
 
-                    ease_dollars(-3)
+                            ease_dollars(-3)
+                        return true
+                        end
+                    }))
                 end
             end
+        end
+
+        SMODS.Jokers.j_lucky_seven.tooltip = function(self, info_queue)
+            info_queue[#info_queue+1] = G.P_CENTERS.c_wheel_of_fortune
         end
     end
 
@@ -282,6 +334,38 @@ function SMODS.INIT.MystJokers()
             end
         end
     end
+
+    -- Suspicious Joker sussy baka
+    if not jokerBlacklists.jimpostor then
+        SMODS.Jokers.j_jimpostor.calculate = function(self, context)
+            if context.cardarea == G.jokers and context.before and not context.blueprint then
+                if G.GAME.hands[context.scoring_name].level <= 1 then
+                    return
+                end
+                level_up_hand(context.blueprint_card or self, context.scoring_name, nil, -1)
+                self.ability.x_mult = self.ability.x_mult + 0.25
+                card_eval_status_text((context.blueprint_card or self), 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_xmult', vars = {self.ability.x_mult}}})
+            end
+        end
+
+        SMODS.Jokers.j_jimpostor.loc_def = function(self)
+            return { self.ability.x_mult }
+        end
+    end
+
+    -- Credits
+    if not jokerBlacklists.credits then
+        SMODS.Jokers.j_credits.set_ability = function(self, context)
+            self.ability.extra = G.GAME.current_round.discards_used + 1
+        end
+
+        SMODS.Jokers.j_credits.calculate = function(self, context)
+            if context.setting_blind and not self.getting_sliced and not context.blueprint then
+                self.ability.extra = 1
+            end
+        end
+    end
+
     sendDebugMessage("Loaded MystJokers~")
 end
 
@@ -336,15 +420,18 @@ function G.FUNCS.evaluate_play(self, e)
     end
 end
 
--- Options
+-- Options / Credits
 local draw_from_deck_to_handref = G.FUNCS.draw_from_deck_to_hand
 function G.FUNCS.draw_from_deck_to_hand(self, e)
     draw_from_deck_to_handref(self, e)
 
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == "Options" and G.GAME.current_round.hands_played == v.ability.extra and G.STATE == G.STATES.DRAW_TO_HAND then
-            for i = 1, 2 do draw_card(G.deck, G.hand, i*100/2, 'up', true) end
-            v.ability.extra = v.ability.extra + 1
+        if G.STATE == G.STATES.DRAW_TO_HAND then
+            if v.ability.name == "Options" and G.GAME.current_round.hands_played == v.ability.extra or 
+              v.ability.name == "Credits" and G.GAME.current_round.discards_used == v.ability.extra then
+                for i = 1, 2 do draw_card(G.deck, G.hand, i*100/2, 'up', true) end
+                v.ability.extra = v.ability.extra + 1
+            end
         end
     end
 end

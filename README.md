@@ -10,9 +10,9 @@
 - **BlindCollectionPatch** *(Balamod only)*: A patch that allows custom Blind sprites to be shown in some UI elements and the Collection.
 
 # Credits
-Joker credits can be found in ``Infodumps\Jokers.md``\
-Yippee Joker sprite by C_rry\
-GoldenChallenge port by UwUDev
+**[MystBlinds]** Joker credits can be found in ``Infodumps\Jokers.md``\
+**[YippeeGameOver]** Yippee Joker sprite by C_rry\
+**[GoldenChallenge]** Balamod port by UwUDev
 
 # Requirements
 Requires [Steamodded](https://github.com/Steamopollys/Steamodded) v0.9.2 or [Balamod](https://github.com/UwUDev/balamod) v0.1.10, depending on the loader you choose.
