@@ -1,5 +1,10 @@
 # Changelog
 
+## April 7th, 2024
+*(at literally 12am, again)*
+### **[HouseRules]**
+- Added
+
 ## April 5th, 2024
 *(at literally 12am)*
 ### **[MystJokers]**

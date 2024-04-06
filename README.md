@@ -7,6 +7,7 @@
 - **YippeeGameOver**: Replaces Jimbo in the win screen with tbh
 - **MystBlinds**: Adds more Blinds to the game.
 - **MystAprilFools**: Happy April Fools! Randomly replaces Blinds with Boss Blinds, randomize Jokers and more...
+- **HouseRules**: Allows setting difficulty modifiers to runs.
 - **BlindCollectionPatch** *(Balamod only)*: A patch that allows custom Blind sprites to be shown in some UI elements and the Collection.
 
 # Credits
