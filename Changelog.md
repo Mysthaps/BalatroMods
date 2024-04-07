@@ -5,6 +5,10 @@
 ### **[HouseRules]**
 - Added
 
+### **[HouseRules]**
+- Modified UI so it reads from left to right
+- Added 8 new modifiers from base game challenges
+
 ## April 5th, 2024
 *(at literally 12am)*
 ### **[MystJokers]**
