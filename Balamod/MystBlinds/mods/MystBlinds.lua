@@ -23,7 +23,6 @@ table.insert(mods,
                     {name = "MystBlinds", path = "pack/"..self.SETTINGS.GRAPHICS.texture_scaling.."x/MystBlinds.png",px=34,py=34, frames = 21},
             ]]
             inject("game.lua", "Game:set_render_settings", toPatch, patch)
-            sendDebugMessage(extractFunctionBody("game.lua", "Game:set_render_settings"))
 
             ---- Blind:set_blind // The Market, The Monster, Noir Silence
             local patch = [[
@@ -133,21 +132,6 @@ table.insert(mods,
                 end
             ]]
             injectTail("blind.lua", "Blind:drawn_to_hand", patch)
-
-            ---- Blind:set_text // The Insect // for future use
-            local toPatch = "if self.name == 'The Ox' then"
-            local patch = [[
-                if self.name == 'The Ox' then
-            ]]
-            inject("blind.lua", "Blind:set_text", toPatch, patch)
-
-            ---- create_UIBox_blind_choice // for future use
-            local toPatch = "local loc_target = localize{type = 'raw_descriptions', key = blind_choice.config.key, set = 'Blind', vars = {localize%(G.GAME.current_round.most_played_poker_hand, 'poker_hands'%)}}"
-            local patch = [[
-                local loc_target = localize{type = 'raw_descriptions', key = blind_choice.config.key, set = 'Blind', vars = {localize%(G.GAME.current_round.most_played_poker_hand, 'poker_hands%')}}
-
-            ]]
-            inject("functions/UI_definitions.lua", "create_UIBox_blind_choice", toPatch, patch)
         end,
         on_post_update = function()
             if not patched then
@@ -246,7 +230,7 @@ table.insert(mods,
                     local blind = v
                     blind.key = v.shorthand
             
-                    blind.order = 30 + k
+                    blind.order = 30 + #G.P_BLINDS + k
                     G.P_BLINDS[v.shorthand] = blind
                 end
 

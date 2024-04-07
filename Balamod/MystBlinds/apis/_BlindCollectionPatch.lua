@@ -8,7 +8,7 @@ table.insert(mods,
         mod_id = "blindcollectionpatch",
         name = "Blind Collection Patch",
         author = "Mysthaps",
-        version = "0.1",
+        version = "0.2",
         description = {
             "Patches several functions to allow adding and displaying Blinds properly",
         },
@@ -101,21 +101,14 @@ table.insert(mods,
             ]]
             inject("functions/UI_definitions.lua", "create_UIBox_your_collection_blinds", toPatch, patch)
             -----------------------------------------------------------------------------------
-            ---- Blind:save
-            local toPatch = "name = self.name,"
-            local patch = [[
-                name = self.name,
-                atlas = self.atlas,
-            ]]
-            inject("blind.lua", "Blind:save", toPatch, patch)
-
             ---- Blind:load
-            local toPatch = "self.name = blindTable.name"
             local patch = [[
-                self.name = blindTable.name
-                self.atlas = blindTable.atlas
+                self.config.blind = G.P_BLINDS[blindTable.config_blind] or {}
+                if self.config.blind.atlas then
+                    self.children.animatedSprite.atlas = G.ANIMATION_ATLAS[self.config.blind.atlas]
+                end
             ]]
-            inject("blind.lua", "Blind:save", toPatch, patch)
+            injectHead("blind.lua", "Blind:load", patch)
             -----------------------------------------------------------------------------------
         end,
     }
