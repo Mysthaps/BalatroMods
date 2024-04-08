@@ -3,7 +3,7 @@
 ## April 7th, 2024
 ### **[HouseRules | Experimental]**
 - Modifiers button can now be pressed while in Continue tab
-- Added 8 more new modifiers
+- Added 9 more new modifiers
 
 ## April 7th, 2024
 *(at literally 12am, again)*

@@ -30,6 +30,7 @@ local localization = {
     m_rental_increase = "Rental loses $1 more each round",
     m_booster_ante_scaling = "Booster Packs cost $1 more per Ante",
     m_booster_less_choices = "Booster Packs offer 1 less choice",
+    m_old_ante_scaling = "1.0.0 Ante scaling"
 }
 
 function SMODS.INIT.HouseRules()
@@ -65,6 +66,7 @@ function SMODS.INIT.HouseRules()
         rental_increase = false,
         booster_ante_scaling = false,
         booster_less_choices = false,
+        old_ante_scaling = false,
     }
 
     sendDebugMessage("Loaded HouseRules~")
@@ -97,6 +99,15 @@ function G.UIDEF.run_setup_option(type)
 end
 
 function add_modifier_node(modifier_name)
+    if not modifier_name then
+        return 
+        { n = G.UIT.R, config = {align = "c", minw = 8, padding = 0, colour = G.C.GREY}, nodes = {
+            {n = G.UIT.C, config = { align = "cr", padding = 0.1 }, nodes = {}},
+            {n = G.UIT.C, config = { align = "c", padding = 0 }, nodes = {
+                { n = G.UIT.T, config = { text = "", scale = 0.95, colour = G.C.UI.TEXT_LIGHT, shadow = true }},
+            }},
+        }}
+    end
     return 
     { n = G.UIT.R, config = {align = "c", minw = 8, padding = 0, colour = G.C.GREY}, nodes = {
         {n = G.UIT.C, config = { align = "cr", padding = 0.1 }, nodes = {
@@ -123,6 +134,7 @@ function create_UIBox_modifiers()
             add_modifier_node('no_shop_jokers'),
             add_modifier_node('perishable_early'),
             add_modifier_node('booster_ante_scaling'),
+            add_modifier_node('old_ante_scaling'),
         }},
         { n = G.UIT.C, config = { align = "cm", padding = 0 }, nodes = {
             add_modifier_node('minus_discard'),
@@ -137,6 +149,7 @@ function create_UIBox_modifiers()
             add_modifier_node('discard_cost'),
             add_modifier_node('rental_increase'),
             add_modifier_node('booster_less_choices'),
+            add_modifier_node(),
         }},
     }})
     return t
@@ -181,6 +194,7 @@ function Game.start_run(self, args)
     if G.modifiers.rental_increase then table.insert(args.challenge.rules.custom, {id = 'rental_increase'}) end
     if G.modifiers.booster_ante_scaling then table.insert(args.challenge.rules.custom, {id = 'booster_ante_scaling'}) end
     if G.modifiers.booster_less_choices then table.insert(args.challenge.rules.custom, {id = 'booster_less_choices'}) end
+    if G.modifiers.old_ante_scaling then table.insert(args.challenge.rules.custom, {id = 'old_ante_scaling'}) end
 
     start_runref(self, args)
 
@@ -295,4 +309,24 @@ function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, h
         end
     end
     return obj
+end
+
+local get_blind_amountref = get_blind_amount
+function get_blind_amount(ante)
+    if not G.GAME.modifiers.old_ante_scaling then return get_blind_amountref(ante) end
+    local k = 0.75
+    local amounts = {}
+    if not G.GAME.modifiers.scaling or G.GAME.modifiers.scaling == 1 then
+        amounts = { 300, 800, 2800, 6000, 11000, 20000, 35000, 50000 }
+    elseif G.GAME.modifiers.scaling == 2 then
+        amounts = { 300, 1000, 3200, 9000, 18000, 32000, 56000, 90000 }
+    elseif G.GAME.modifiers.scaling == 3 then
+        amounts = { 300, 1200, 3600, 10000, 25000, 50000, 90000, 180000 }
+    end
+    if ante < 1 then return 100 end
+    if ante <= 8 then return amounts[ante] end
+    local a, b, c, d = amounts[8], 1.6, ante - 8, 1 + 0.2 * (ante - 8)
+    local amount = math.floor(a * (b + (k * c) ^ d) ^ c)
+    amount = amount - amount % (10 ^ math.floor(math.log10(amount) - 1))
+    return amount
 end
