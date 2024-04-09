@@ -7,6 +7,9 @@
   - Each page contains modifiers of each category: Basic, Challenges, Joker, Legacy
 - A bunch of internal changes
 - Added 7 new modifiers
+- Fixes:
+  - Perishable Jokers can now appear when "All Jokers are Eternal" is enabled
+  - Perishable Jokers can now gain Eternal when "When Ante 4 boss is defeated, all Jokers become Eternal" is enabled
 
 ## April 7th, 2024
 ### **[HouseRules | Experimental]**

@@ -242,7 +242,7 @@ function Game.start_run(self, args)
 
     -- hmst
     if G.HouseRules_modifiers.flipped_cards then table.insert(args.challenge.rules.custom, {id = 'flipped_cards', value = 4}) end
-    if G.HouseRules_modifiers.all_eternal then table.insert(args.challenge.rules.custom, {id = 'all_eternal'}) end
+    if G.HouseRules_modifiers.all_eternal then table.insert(args.challenge.rules.custom, {id = 'all_eternal_mod'}) end
     if G.HouseRules_modifiers.no_interest then table.insert(args.challenge.rules.custom, {id = 'no_interest'}) end
     if G.HouseRules_modifiers.no_extra_hand_money then table.insert(args.challenge.rules.custom, {id = 'no_extra_hand_money'}) end
     if G.HouseRules_modifiers.debuff_played_cards then table.insert(args.challenge.rules.custom, {id = 'debuff_played_cards'}) end
@@ -336,6 +336,9 @@ local create_cardref = create_card
 function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
     local card = create_cardref(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
     if _type == "Joker" then
+        if G.GAME.modifiers.all_eternal_mod then
+            card:set_eternal(true)
+        end
         if G.GAME.modifiers.all_perishable then
             card:set_perishable(true)
         end
@@ -352,6 +355,17 @@ function Card.set_perishable(self)
     if G.GAME.modifiers.all_perishable then
         self.ability.perishable = true
         self.ability.perish_tally = G.GAME.perishable_rounds
+    end
+end
+
+local set_eternalref = Card.set_eternal
+function Card.set_eternal(self)
+    set_eternalref(self)
+    if self.config.center.eternal_compat then
+        if G.GAME.modifiers.all_eternal_mod or
+        G.GAME.modifiers.set_eternal_ante and (G.GAME.round_resets.ante == G.GAME.modifiers.set_eternal_ante) then
+            self.ability.eternal = true
+        end
     end
 end
 
