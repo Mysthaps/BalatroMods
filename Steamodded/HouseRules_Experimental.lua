@@ -27,10 +27,75 @@ local localization = {
     m_all_perishable = "All Jokers are Perishable",
     m_all_rental = "All Jokers are Rental",
     m_perishable_early = "Perishable debuffs Jokers 2 rounds earlier",
-    m_rental_increase = "Rental loses $1 more each round",
+    m_rental_increase = "Rental Jokers take $1 more each round",
     m_booster_ante_scaling = "Booster Packs cost $1 more per Ante",
     m_booster_less_choices = "Booster Packs offer 1 less choice",
-    m_old_ante_scaling = "1.0.0 Ante scaling"
+    m_old_ante_scaling = "1.0.0 Ante scaling",
+    m_minus_hand_size_per_X_dollar = "-1 hand size for every $5 you have",
+    m_debuff_common = "All Common Jokers are debuffed",
+    m_debuff_uncommon = "All Uncommon Jokers are debuffed",
+    m_debuff_rare = "All Rare Jokers are debuffed",
+    m_set_eternal_ante = "When Ante 4 boss is defeated, all Jokers become Eternal",
+    m_set_joker_slots_ante = "When Ante 4 boss is defeated, set Joker slots to 0",
+    m_chips_dollar_cap = "Chips cannot exceed the current $",
+}
+
+local all_modifiers = {
+    -- Basic
+    "minus_discard",
+    "minus_hand",
+    "minus_hand_size",
+    "minus_consumable_slot",
+    "minus_joker_slot",
+    "minus_starting_dollars",
+    "increased_blind_size",
+    "increased_reroll_cost",
+    "minus_shop_card",
+    "minus_shop_booster",
+    "booster_less_choices", 
+    "",
+
+    -- Challenges
+    "flipped_cards",
+    "no_shop_jokers",
+    "no_interest",
+    "no_extra_hand_money",
+    "debuff_played_cards",
+    "inflation",
+    "discard_cost",
+    "minus_hand_size_per_X_dollar",
+    "set_eternal_ante",
+    "set_joker_slots_ante",
+    "chips_dollar_cap",
+    "",
+
+    -- Jokers
+    "all_eternal",
+    "all_perishable",
+    "all_rental",
+    "perishable_early",
+    "rental_increase",
+    "debuff_common",
+    "debuff_uncommon",
+    "debuff_rare",
+    "",
+    "",
+    "",
+    "",
+
+    -- Legacy
+    "booster_ante_scaling",
+    "old_ante_scaling",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "", 
+    "", 
+    "", 
+    "", 
 }
 
 function SMODS.INIT.HouseRules()
@@ -41,37 +106,17 @@ function SMODS.INIT.HouseRules()
     init_localization()
 
     -- default values
-    G.modifiers = {
-        minus_discard = false,
-        minus_hand = false,
-        minus_hand_size = false,
-        minus_consumable_slot = false,
-        minus_joker_slot = false,
-        minus_starting_dollars = false,
-        increased_blind_size = false,
-        increased_reroll_cost = false,
-        minus_shop_card = false,
-        minus_shop_booster = false,
-        flipped_cards = false,
-        all_eternal = false,
-        no_interest = false,
-        no_extra_hand_money = false,
-        debuff_played_cards = false,
-        inflation = false,
-        no_shop_jokers = false,
-        discard_cost = false,
-        all_perishable = false,
-        all_rental = false,
-        perishable_early = false,
-        rental_increase = false,
-        booster_ante_scaling = false,
-        booster_less_choices = false,
-        old_ante_scaling = false,
-    }
+    G.HouseRules_modifiers = {}
+    for _, v in ipairs(all_modifiers) do 
+        if v ~= "" then G.HouseRules_modifiers[v] = false end 
+    end
 
     sendDebugMessage("Loaded HouseRules~")
 end
 
+---- HouseRules UI
+
+-- Add "Modifiers" button
 local run_setup_optionref = G.UIDEF.run_setup_option
 function G.UIDEF.run_setup_option(type)
     local t = run_setup_optionref(type)
@@ -99,19 +144,19 @@ function G.UIDEF.run_setup_option(type)
 end
 
 function add_modifier_node(modifier_name)
-    if not modifier_name then
+    if not modifier_name or modifier_name == "" then
         return 
-        { n = G.UIT.R, config = {align = "c", minw = 8, padding = 0, colour = G.C.GREY}, nodes = {
+        { n = G.UIT.R, config = {align = "c", minw = 8, padding = 0, colour = G.C.CLEAR}, nodes = {
             {n = G.UIT.C, config = { align = "cr", padding = 0.1 }, nodes = {}},
             {n = G.UIT.C, config = { align = "c", padding = 0 }, nodes = {
-                { n = G.UIT.T, config = { text = "", scale = 0.95, colour = G.C.UI.TEXT_LIGHT, shadow = true }},
+                { n = G.UIT.T, config = { text = "", scale = 0.9175, colour = G.C.UI.TEXT_LIGHT, shadow = true }},
             }},
         }}
     end
     return 
-    { n = G.UIT.R, config = {align = "c", minw = 8, padding = 0, colour = G.C.GREY}, nodes = {
+    { n = G.UIT.R, config = {align = "c", minw = 8, padding = 0, colour = G.C.CLEAR}, nodes = {
         {n = G.UIT.C, config = { align = "cr", padding = 0.1 }, nodes = {
-            create_toggle{ col = true, label = "", w = 0, scale = 0.6, shadow = true, ref_table = G.modifiers, ref_value = modifier_name },
+            create_toggle{ col = true, label = "", w = 0, scale = 0.6, shadow = true, ref_table = G.HouseRules_modifiers, ref_value = modifier_name },
         }},
         {n = G.UIT.C, config = { align = "c", padding = 0 }, nodes = {
             { n = G.UIT.T, config = { text = localize('m_'..modifier_name), scale = 0.3, colour = G.C.UI.TEXT_LIGHT, shadow = true }},
@@ -120,36 +165,23 @@ function add_modifier_node(modifier_name)
 end
 
 function create_UIBox_modifiers()
+    local page_options = {
+        "Basic",
+        "Challenges",
+        "Jokers",
+        "Legacy"
+    }
+
+    G.E_MANAGER:add_event(Event({func = (function()
+        G.FUNCS.modifiers_change_page{cycle_config = {current_option = 1}}
+    return true end)}))
+
     local t = create_UIBox_generic_options({ back_id = G.STATE == G.STATES.GAME_OVER and 'from_game_over', back_func = 'setup_run', contents = {
-        { n = G.UIT.C, config = { align = "cm", padding = 0 }, nodes = {
-            add_modifier_node('minus_hand'),
-            add_modifier_node('minus_hand_size'),
-            add_modifier_node('minus_joker_slot'),
-            add_modifier_node('increased_blind_size'),
-            add_modifier_node('minus_shop_card'),
-            add_modifier_node('flipped_cards'),
-            add_modifier_node('all_perishable'),
-            add_modifier_node('no_interest'),
-            add_modifier_node('debuff_played_cards'),
-            add_modifier_node('no_shop_jokers'),
-            add_modifier_node('perishable_early'),
-            add_modifier_node('booster_ante_scaling'),
-            add_modifier_node('old_ante_scaling'),
+        { n = G.UIT.R, config = { align = "cm", padding = 0.1, minh = 9, minw = 4.2 }, nodes = {
+            { n = G.UIT.O, config = { id = 'modifiers_list', object = Moveable() }},
         }},
-        { n = G.UIT.C, config = { align = "cm", padding = 0 }, nodes = {
-            add_modifier_node('minus_discard'),
-            add_modifier_node('minus_consumable_slot'),
-            add_modifier_node('minus_starting_dollars'),
-            add_modifier_node('increased_reroll_cost'),
-            add_modifier_node('minus_shop_booster'),
-            add_modifier_node('all_eternal'),
-            add_modifier_node('all_rental'),
-            add_modifier_node('no_extra_hand_money'),
-            add_modifier_node('inflation'),
-            add_modifier_node('discard_cost'),
-            add_modifier_node('rental_increase'),
-            add_modifier_node('booster_less_choices'),
-            add_modifier_node(),
+        { n = G.UIT.R, config = { align = "cm" }, nodes = {
+            create_option_cycle({options = page_options, w = 4.5, cycle_shoulders = true, opt_callback = 'modifiers_change_page', current_option = 1, colour = G.C.RED, no_pips = true, focus_args = {snap_to = true, nav = 'wide'}})
         }},
     }})
     return t
@@ -162,7 +194,38 @@ G.FUNCS.modifiers = function(e)
     }
 end
 
--- Apply Modifiers to run
+G.FUNCS.modifiers_change_page = function(args)
+    if not args or not args.cycle_config then return end
+    if G.OVERLAY_MENU then
+        local m_list = G.OVERLAY_MENU:get_UIE_by_ID('modifiers_list')
+        if m_list then
+            if m_list.config.object then
+                m_list.config.object:remove()
+            end
+            m_list.config.object = UIBox {
+                definition = modifiers_page(args.cycle_config.current_option - 1),
+                config = { offset = { x = 0, y = 0 }, align = 'cm', parent = m_list }
+            }
+        end
+    end
+end
+
+function modifiers_page(_page)
+    local modifiers_list = {}
+    for k, v in ipairs(all_modifiers) do
+        if k > 12 * (_page or 0) and k <= 12 * ((_page or 0) + 1) then
+            modifiers_list[#modifiers_list + 1] = add_modifier_node(v)
+        end
+    end
+
+    for _ = #modifiers_list+1, 12 do
+        modifiers_list[#modifiers_list + 1] = add_modifier_node()
+    end
+  
+    return {n=G.UIT.ROOT, config={align = "c", padding = 0, colour = G.C.CLEAR}, nodes = modifiers_list}
+end
+
+---- Apply Modifiers to run
 local start_runref = Game.start_run
 function Game.start_run(self, args)
     if args.savetext then
@@ -178,72 +241,79 @@ function Game.start_run(self, args)
     }
 
     -- hmst
-    if G.modifiers.flipped_cards then table.insert(args.challenge.rules.custom, {id = 'flipped_cards', value = 4}) end
-    if G.modifiers.all_eternal then table.insert(args.challenge.rules.custom, {id = 'all_eternal'}) end
-    if G.modifiers.no_interest then table.insert(args.challenge.rules.custom, {id = 'no_interest'}) end
-    if G.modifiers.no_extra_hand_money then table.insert(args.challenge.rules.custom, {id = 'no_extra_hand_money'}) end
-    if G.modifiers.debuff_played_cards then table.insert(args.challenge.rules.custom, {id = 'debuff_played_cards'}) end
-    if G.modifiers.inflation then table.insert(args.challenge.rules.custom, {id = 'inflation'}) end
-    if G.modifiers.no_shop_jokers then table.insert(args.challenge.rules.custom, {id = 'no_shop_jokers'}) end
-    if G.modifiers.discard_cost then table.insert(args.challenge.rules.custom, {id = 'discard_cost', value = 1}) end
-    if G.modifiers.minus_shop_card then table.insert(args.challenge.rules.custom, {id = 'minus_shop_card'}) end
-    if G.modifiers.minus_shop_booster then table.insert(args.challenge.rules.custom, {id = 'minus_shop_booster'}) end
-    if G.modifiers.all_perishable then table.insert(args.challenge.rules.custom, {id = 'all_perishable'}) end
-    if G.modifiers.all_rental then table.insert(args.challenge.rules.custom, {id = 'all_rental'}) end
-    if G.modifiers.perishable_early then table.insert(args.challenge.rules.custom, {id = 'perishable_early'}) end
-    if G.modifiers.rental_increase then table.insert(args.challenge.rules.custom, {id = 'rental_increase'}) end
-    if G.modifiers.booster_ante_scaling then table.insert(args.challenge.rules.custom, {id = 'booster_ante_scaling'}) end
-    if G.modifiers.booster_less_choices then table.insert(args.challenge.rules.custom, {id = 'booster_less_choices'}) end
-    if G.modifiers.old_ante_scaling then table.insert(args.challenge.rules.custom, {id = 'old_ante_scaling'}) end
+    if G.HouseRules_modifiers.flipped_cards then table.insert(args.challenge.rules.custom, {id = 'flipped_cards', value = 4}) end
+    if G.HouseRules_modifiers.all_eternal then table.insert(args.challenge.rules.custom, {id = 'all_eternal'}) end
+    if G.HouseRules_modifiers.no_interest then table.insert(args.challenge.rules.custom, {id = 'no_interest'}) end
+    if G.HouseRules_modifiers.no_extra_hand_money then table.insert(args.challenge.rules.custom, {id = 'no_extra_hand_money'}) end
+    if G.HouseRules_modifiers.debuff_played_cards then table.insert(args.challenge.rules.custom, {id = 'debuff_played_cards'}) end
+    if G.HouseRules_modifiers.inflation then table.insert(args.challenge.rules.custom, {id = 'inflation'}) end
+    if G.HouseRules_modifiers.no_shop_jokers then table.insert(args.challenge.rules.custom, {id = 'no_shop_jokers'}) end
+    if G.HouseRules_modifiers.discard_cost then table.insert(args.challenge.rules.custom, {id = 'discard_cost', value = 1}) end
+    if G.HouseRules_modifiers.minus_shop_card then table.insert(args.challenge.rules.custom, {id = 'minus_shop_card'}) end
+    if G.HouseRules_modifiers.minus_shop_booster then table.insert(args.challenge.rules.custom, {id = 'minus_shop_booster'}) end
+    if G.HouseRules_modifiers.all_perishable then table.insert(args.challenge.rules.custom, {id = 'all_perishable'}) end
+    if G.HouseRules_modifiers.all_rental then table.insert(args.challenge.rules.custom, {id = 'all_rental'}) end
+    if G.HouseRules_modifiers.perishable_early then table.insert(args.challenge.rules.custom, {id = 'perishable_early'}) end
+    if G.HouseRules_modifiers.rental_increase then table.insert(args.challenge.rules.custom, {id = 'rental_increase'}) end
+    if G.HouseRules_modifiers.booster_ante_scaling then table.insert(args.challenge.rules.custom, {id = 'booster_ante_scaling'}) end
+    if G.HouseRules_modifiers.booster_less_choices then table.insert(args.challenge.rules.custom, {id = 'booster_less_choices'}) end
+    if G.HouseRules_modifiers.old_ante_scaling then table.insert(args.challenge.rules.custom, {id = 'old_ante_scaling'}) end
+    if G.HouseRules_modifiers.minus_hand_size_per_X_dollar then table.insert(args.challenge.rules.custom, {id = 'minus_hand_size_per_X_dollar', value = 5}) end
+    if G.HouseRules_modifiers.debuff_common then table.insert(args.challenge.rules.custom, {id = 'debuff_common'}) end
+    if G.HouseRules_modifiers.debuff_uncommon then table.insert(args.challenge.rules.custom, {id = 'debuff_uncommon'}) end
+    if G.HouseRules_modifiers.debuff_rare then table.insert(args.challenge.rules.custom, {id = 'debuff_rare'}) end
+    if G.HouseRules_modifiers.set_eternal_ante then table.insert(args.challenge.rules.custom, {id = 'set_eternal_ante', value = 4}) end
+    if G.HouseRules_modifiers.set_joker_slots_ante then table.insert(args.challenge.rules.custom, {id = 'set_joker_slots_ante', value = 4}) end
+    if G.HouseRules_modifiers.chips_dollar_cap then table.insert(args.challenge.rules.custom, {id = 'chips_dollar_cap'}) end
 
     start_runref(self, args)
 
-    if G.modifiers.minus_discard then 
+    if G.HouseRules_modifiers.minus_discard then 
         self.GAME.starting_params.discards = self.GAME.starting_params.discards - 1 
         self.GAME.round_resets.discards = self.GAME.starting_params.discards
         self.GAME.current_round.discards_left = self.GAME.starting_params.discards
     end
-    if G.modifiers.minus_hand then 
+    if G.HouseRules_modifiers.minus_hand then 
         self.GAME.starting_params.hands = self.GAME.starting_params.hands - 1 
         self.GAME.round_resets.hands = self.GAME.starting_params.hands
         self.GAME.current_round.hands_left = self.GAME.starting_params.hands
     end
-    if G.modifiers.minus_consumable_slot then 
+    if G.HouseRules_modifiers.minus_consumable_slot then 
         self.GAME.starting_params.consumable_slots = self.GAME.starting_params.consumable_slots - 1
         G.consumeables.config.card_limit = self.GAME.starting_params.consumable_slots
     end
-    if G.modifiers.minus_hand_size then 
+    if G.HouseRules_modifiers.minus_hand_size then 
         self.GAME.starting_params.hand_size = self.GAME.starting_params.hand_size - 1 
         G.hand.config.card_limit = self.GAME.starting_params.hand_size
     end
-    if G.modifiers.minus_joker_slot then 
+    if G.HouseRules_modifiers.minus_joker_slot then 
         self.GAME.starting_params.joker_slots = self.GAME.starting_params.joker_slots - 1
         G.jokers.config.card_limit = self.GAME.starting_params.joker_slots
     end
-    if G.modifiers.minus_starting_dollars then 
+    if G.HouseRules_modifiers.minus_starting_dollars then 
         self.GAME.starting_params.dollars = self.GAME.starting_params.dollars - 4
         self.GAME.dollars = self.GAME.starting_params.dollars
     end
-    if G.modifiers.increased_reroll_cost then 
+    if G.HouseRules_modifiers.increased_reroll_cost then 
         self.GAME.starting_params.reroll_cost = self.GAME.starting_params.reroll_cost + 1 
         self.GAME.round_resets.reroll_cost = self.GAME.starting_params.reroll_cost
         self.GAME.base_reroll_cost = self.GAME.starting_params.reroll_cost
         self.GAME.round_resets.reroll_cost = self.GAME.base_reroll_cost
         self.GAME.current_round.reroll_cost = self.GAME.base_reroll_cost
     end
-    if G.modifiers.increased_blind_size then
+    if G.HouseRules_modifiers.increased_blind_size then
         self.GAME.starting_params.ante_scaling = self.GAME.starting_params.ante_scaling * 2
     end
-    if G.modifiers.minus_shop_card then G.GAME.shop.joker_max = G.GAME.shop.joker_max - 1 end
-    if G.modifiers.perishable_early then G.GAME.perishable_rounds = G.GAME.perishable_rounds - 2 end
-    if G.modifiers.rental_increase then G.GAME.rental_rate = G.GAME.rental_rate + 1 end
+    if G.HouseRules_modifiers.minus_shop_card then G.GAME.shop.joker_max = G.GAME.shop.joker_max - 1 end
+    if G.HouseRules_modifiers.perishable_early then G.GAME.perishable_rounds = G.GAME.perishable_rounds - 2 end
+    if G.HouseRules_modifiers.rental_increase then G.GAME.rental_rate = G.GAME.rental_rate + 1 end
 end
 
 local shopref = G.UIDEF.shop
 function G.UIDEF.shop()
     local t = shopref()
     if G.GAME.modifiers["minus_shop_booster"] then
-        if G.modifiers.minus_shop_booster then 
+        if G.HouseRules_modifiers.minus_shop_booster then 
             G.shop_booster.config.card_limit = G.shop_booster.config.card_limit - 1
             t.nodes[1].nodes[1].nodes[1].nodes[1].nodes[3].nodes[2].nodes[1].config = { object = G.shop_booster }
         end
@@ -291,6 +361,13 @@ function Card.set_ability(self, center, initial, delay_sprites)
     if G.GAME.modifiers.booster_less_choices then
         if self.ability.set == "Booster" then
             self.ability.extra = self.ability.extra - 1
+        end
+    end
+    if self.ability.set == "Joker" then
+        if G.GAME.modifiers.debuff_common and self.config.center.rarity == 1 or
+        G.GAME.modifiers.debuff_uncommon and self.config.center.rarity == 2 or
+        G.GAME.modifiers.debuff_rare and self.config.center.rarity == 3 then
+            self.ability.perma_debuff = true
         end
     end
 end

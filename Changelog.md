@@ -1,5 +1,13 @@
 # Changelog
 
+## April 9th, 2024
+### **[HouseRules | Experimental]**
+- Reworked UI
+  - Now split into pages
+  - Each page contains modifiers of each category: Basic, Challenges, Joker, Legacy
+- A bunch of internal changes
+- Added 7 new modifiers
+
 ## April 7th, 2024
 ### **[HouseRules | Experimental]**
 - Modifiers button can now be pressed while in Continue tab
