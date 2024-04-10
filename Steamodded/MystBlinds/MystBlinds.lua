@@ -94,7 +94,7 @@ function SMODS.INIT.MystBlinds()
 
     -- Blinds
     ---- The Market
-    SMODS.Blinds.bl_market.set = function(self, blind, reset, silent)
+    SMODS.Blinds.bl_market.set_blind = function(self, blind, reset, silent)
         self.prepped = nil
         self.discards_sub = 1
     end
@@ -102,7 +102,7 @@ function SMODS.INIT.MystBlinds()
     ---- The Stone
 
     ---- The Monster
-    SMODS.Blinds.bl_monster.set = function(self, blind, reset, silent)
+    SMODS.Blinds.bl_monster.set_blind = function(self, blind, reset, silent)
         G.GAME.consumeable_buffer = 0
 
         ---- check for Chicot
@@ -130,7 +130,7 @@ function SMODS.INIT.MystBlinds()
     ---- The Insect
 
     ---- Noir Silence
-    SMODS.Blinds.bl_noir_silence.set = function(self, blind, reset, silent)
+    SMODS.Blinds.bl_noir_silence.set_blind = function(self, blind, reset, silent)
         self.prepped = nil
         self.discards_sub = 1
         self.hands_sub = math.min(G.hand.config.card_limit - 1, 4)

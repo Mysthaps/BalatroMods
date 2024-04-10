@@ -1,5 +1,9 @@
 # Changelog
 
+## April 10th, 2024
+### **[MystBlinds]**
+- Fixed crashing on Blinds with the ``set_blind`` function
+
 ## April 9th, 2024
 ### **[HouseRules | Experimental]**
 - Reworked UI
