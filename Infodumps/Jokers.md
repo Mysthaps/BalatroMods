@@ -123,7 +123,7 @@ You *will* lose the game when the timer is up.
 ![Collectible Card](./sprites/j_rdcards.png)
 - **Rarity**: Rare
 - **Base Cost**: $8
-- **Description**: Each scored card with same **rank** as the **first** scored card gives **+4** Chips to all cards in **full deck** of that rank
+- **Description**: Each scored card with same **rank** as the **first** scored card gives **+5** Chips to all cards in **full deck** of that rank
 
 *Pulling card...*\
 ***Woah!***\

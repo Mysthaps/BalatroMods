@@ -116,7 +116,7 @@ local localization = {
         text = {
             "Each scored card with same",
             "{C:attention}rank{} as {C:attention}first{} scored card",
-            "gives {C:chips}+4{} Chips to all cards",
+            "gives {C:chips}+5{} Chips to all cards",
             "in {C:attention}full deck{} of that rank",
         }
     }
@@ -498,18 +498,20 @@ function SMODS.INIT.MystJokers()
         SMODS.Jokers.j_myst_rdcards.calculate = function(self, context)
             if context.individual and context.cardarea == G.play then
                 local id = context.scoring_hand[1]:get_id()
-                for _, v in ipairs(G.playing_cards) do
-                    if v:get_id() == id then
-                        v.ability.perma_bonus = v.ability.perma_bonus or 0
-                        v.ability.perma_bonus = v.ability.perma_bonus + 4
+                    if context.other_card:get_id() == id then
+                    for _, v in ipairs(G.playing_cards) do
+                        if v:get_id() == id then
+                            v.ability.perma_bonus = v.ability.perma_bonus or 0
+                            v.ability.perma_bonus = v.ability.perma_bonus + 5
+                        end
                     end
-                end
 
-                return {
-                    extra = {message = localize('k_upgrade_ex'), colour = G.C.CHIPS},
-                    colour = G.C.CHIPS,
-                    card = self
-                }
+                    return {
+                        extra = {message = localize('k_upgrade_ex'), colour = G.C.CHIPS},
+                        colour = G.C.CHIPS,
+                        card = self
+                    }
+                end
             end
         end
     end
@@ -530,13 +532,13 @@ end
 local card_updateref = Card.update
 function Card.update(self, dt)
     if G.STAGE == G.STAGES.RUN then
-        if self.ability.name == "Autism Creature" then
+        if self.config.center.key == "j_myst_autism_creature" then
             self.ability.extra = (G.jokers.config.card_limit - #G.jokers.cards) * 6
             for i = 1, #G.jokers.cards do
                 if G.jokers.cards[i].ability.name == 'Joker Stencil' then self.ability.extra = self.ability.extra + 6 end
             end
         end
-        if self.ability.name == "bobm" and not self.debuff then
+        if self.config.center.key == "j_myst_bobm" and not self.debuff then
             self.ability.extra = self.ability.extra - (dt / G.SETTINGS.GAMESPEED)
             if self.ability.extra <= 0 and G.STATE ~= G.STATES.GAME_OVER then
                 G.STATE = G.STATES.GAME_OVER
@@ -557,7 +559,7 @@ local card_set_spritesref = Card.set_sprites
 function Card.set_sprites(self, _center, _front)
     card_set_spritesref(self, _center, _front)
     if _center and _center.set then
-        if _center.name == 'Collectible Card' and (_center.discovered or self.bypass_discovery_center) then 
+        if _center.key == 'j_myst_rdcards' and (_center.discovered or self.bypass_discovery_center) then 
             self.children.center.scale.y = self.children.center.scale.y/1.33333
         end
     end
@@ -572,7 +574,7 @@ function Card.load(self, cardTable, other_card)
     local H = G.CARD_H
     local W = G.CARD_W
 
-    if self.config.center.name == "Photograph" then 
+    if self.config.center.key == "j_myst_rdcards" then 
         self.T.h = H*scale/1.33333*scale
         self.T.w = W*scale
     end
@@ -585,7 +587,7 @@ function Card.open(self)
     local extra_pulls = 0
     if self.ability.set == "Booster" then
         for _, v in ipairs(G.jokers.cards) do
-            if v.ability.name == "Polydactyly" and not v.debuff then
+            if v.config.center.key == "j_myst_polydactyly" and not v.debuff then
                 extra_pulls = extra_pulls + 1
             end
         end
@@ -621,8 +623,8 @@ function G.FUNCS.draw_from_deck_to_hand(self, e)
 
     for _, v in ipairs(G.jokers.cards) do
         if G.STATE == G.STATES.DRAW_TO_HAND then
-            if v.ability.name == "Options" and G.GAME.current_round.hands_played == v.ability.extra or 
-            v.ability.name == "Credits" and G.GAME.current_round.discards_used == v.ability.extra and not v.debuff then
+            if v.config.center.key == "j_myst_options" and G.GAME.current_round.hands_played == v.ability.extra or 
+            v.config.center.key == "j_myst_credits" and G.GAME.current_round.discards_used == v.ability.extra and not v.debuff then
                 for i = 1, 2 do draw_card(G.deck, G.hand, i*100/2, 'up', true) end
                 v.ability.extra = v.ability.extra + 1
             end
@@ -634,7 +636,7 @@ end
 local set_costref = Card.set_cost
 function Card.set_cost(self)
     set_costref(self)
-    if self.ability.name == "R Key" then
+    if self.config.center.key == "j_myst_r_key" then
         self.sell_cost = 0
     end
 end

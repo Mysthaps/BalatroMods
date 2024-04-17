@@ -3,6 +3,7 @@
 ## April 17th, 2024
 ### **[MystJokers]**
 - Updated all Joker's shorthands, now all start with ``j_myst_``
+- All effects now check for key instead of name
 - Added three* new Jokers
 - Slightly modified text for **Miracle Milk** and **Suspicious Joker**
 - **Polydactyly**, **Options** and **Credits** no longer work when debuffed
@@ -11,6 +12,7 @@
 - **R Key**: 
   - Cost **$15** *(was supposed to be $99 but it didn't work)* > **$40**
   - Sell cost now fixed at **$0**
+- Bug fixes
 ### **[MystBlinds | Steamodded]**
 - Updated all functions to ``0.9.8``
 
