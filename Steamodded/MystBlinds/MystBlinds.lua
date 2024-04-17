@@ -99,7 +99,33 @@ function SMODS.INIT.MystBlinds()
         self.discards_sub = 1
     end
 
+    SMODS.Blinds.bl_market.press_play = function(self)
+        self.prepped = true
+    end
+
+    SMODS.Blinds.bl_market.drawn_to_hand = function(self)
+        if G.GAME.current_round.hands_played == self.discards_sub then
+            self:wiggle()
+            G.E_MANAGER:add_event(Event({
+                trigger = 'ease',
+                blocking = false,
+                ref_table = G.GAME,
+                ref_value = 'chips',
+                ease_to = G.GAME.chips - math.floor(G.GAME.chips/4),
+                delay =  0.5,
+                func = (function(t) return math.floor(t) end)
+            }))
+            self.discards_sub = self.discards_sub + 1
+        end
+    end
+
     ---- The Stone
+    SMODS.Blinds.bl_stone.debuff_card = function(self, card, from_blind)
+        if card.area ~= G.jokers and card.config.center ~= G.P_CENTERS.c_base then
+            card:set_debuff(true)
+            return
+        end
+    end
 
     ---- The Monster
     SMODS.Blinds.bl_monster.set_blind = function(self, blind, reset, silent)
@@ -128,6 +154,13 @@ function SMODS.INIT.MystBlinds()
     end
 
     ---- The Insect
+    SMODS.Blinds.bl_insect.drawn_to_hand = function(self)
+        if G.jokers and G.jokers.cards[1] and not G.jokers.cards[1].debuffed then
+            G.jokers.cards[1]:set_debuff(true)
+            G.jokers.cards[1]:juice_up()
+            self:wiggle()
+        end
+    end
 
     ---- Noir Silence
     SMODS.Blinds.bl_noir_silence.set_blind = function(self, blind, reset, silent)
@@ -136,68 +169,25 @@ function SMODS.INIT.MystBlinds()
         self.hands_sub = math.min(G.hand.config.card_limit - 1, 4)
         G.hand:change_size(-self.hands_sub)
     end
+
     SMODS.Blinds.bl_noir_silence.disable = function(self)
         G.hand:change_size(self.hands_sub)
     end
+
     SMODS.Blinds.bl_noir_silence.defeat = function(self, silent)
         G.hand:change_size(self.hands_sub)
     end
-end
 
----- Blind:press_play // The Market, Noir Silence
-local press_playref = Blind.press_play
-function Blind.press_play(self)
-    press_playref(self)
-    if not self.disabled then
-        if self.name == "The Market" or self.name == "Noir Silence" then
-            self.prepped = true
-        end
+    SMODS.Blinds.bl_noir_silence.press_play = function(self)
+        self.prepped = true
     end
-end
 
----- Blind:debuff_card // The Stone
-local debuff_cardref = Blind.debuff_card
-function Blind.debuff_card(self, card, from_blind)
-    debuff_cardref(self, card, from_blind)
-    if self.debuff and not self.disabled and card.area ~= G.jokers then
-        if self.name == "The Stone" and card.config.center ~= G.P_CENTERS.c_base then
-            card:set_debuff(true)
-            return
-        end
-    end
-end
-
-
----- Blind:drawn_to_hand // The Market, Noir Silence, The Insect
-local drawn_to_handref = Blind.drawn_to_hand
-function Blind.drawn_to_hand(self)
-    drawn_to_handref(self)
-    if not self.disabled then 
-        if self.name == "The Market" and G.GAME.current_round.hands_played == self.discards_sub then
-            self:wiggle()
-            G.E_MANAGER:add_event(Event({
-                trigger = 'ease',
-                blocking = false,
-                ref_table = G.GAME,
-                ref_value = 'chips',
-                ease_to = G.GAME.chips - math.floor(G.GAME.chips/4),
-                delay =  0.5,
-                func = (function(t) return math.floor(t) end)
-            }))
-            self.discards_sub = self.discards_sub + 1
-        end
-        if self.name == "Noir Silence" and G.GAME.current_round.hands_played == self.discards_sub then
+    SMODS.Blinds.bl_noir_silence.drawn_to_hand = function(self)
+        if G.GAME.current_round.hands_played == self.discards_sub then
             G.hand:change_size(1)
             self.discards_sub = self.discards_sub + 1 -- hands played
             self.hands_sub = self.hands_sub - 1 -- size removed
             self:wiggle()
-        end
-        if self.name == "The Insect" then
-            if G.jokers and G.jokers.cards[1] and not G.jokers.cards[1].debuffed then
-                G.jokers.cards[1]:set_debuff(true)
-                G.jokers.cards[1]:juice_up()
-                self:wiggle()
-            end
         end
     end
 end

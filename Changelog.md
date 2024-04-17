@@ -1,5 +1,19 @@
 # Changelog
 
+## April 17th, 2024
+### **[MystJokers]**
+- Updated all Joker's shorthands, now all start with ``j_myst_``
+- Added three* new Jokers
+- Slightly modified text for **Miracle Milk** and **Suspicious Joker**
+- **Polydactyly**, **Options** and **Credits** no longer work when debuffed
+- Actually updated cost for **Options** and **Credits**
+- **Yield My Flesh**: Effect **X2.5** Mult > **X3** Mult, cost **$6** > **$7**
+- **R Key**: 
+  - Cost **$15** *(was supposed to be $99 but it didn't work)* > **$40**
+  - Sell cost now fixed at **$0**
+### **[MystBlinds | Steamodded]**
+- Updated all functions to ``0.9.8``
+
 ## April 10th, 2024
 ### **[MystBlinds]**
 - Fixed crashing on Blinds with the ``set_blind`` function

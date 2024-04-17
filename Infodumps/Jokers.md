@@ -11,7 +11,7 @@
 ![Miracle Milk](./sprites/j_miracle_milk.png)
 - **Rarity**: Common
 - **Base Cost**: $4
-- **Description**: **Undebuff** all scored cards, **+8** Chips per **undebuffed** card
+- **Description**: **Undebuff** all scored cards. This Joker gains **+8** Chips per **undebuffed** card
 
 When a debuffed card is scored, it will be undebuffed before calculations occur.
 
@@ -21,7 +21,7 @@ When a debuffed card is scored, it will be undebuffed before calculations occur.
 ![Yield My Flesh](./sprites/j_yield_flesh.png)
 - **Rarity**: Uncommon
 - **Base Cost**: $7
-- **Description**: **X2.5** Mult after first played hand scores less than **5%** of required chips
+- **Description**: **X3** Mult after first played hand scores less than **5%** of required chips
 
 Does not trigger XMult on the first hand.
 
@@ -88,8 +88,39 @@ Does not count itself as an empty Joker slot. However, it will count **Joker Ste
 ![Jimpostor](./sprites/j_jimpostor.png)
 - **Rarity**: Uncommon
 - **Base Cost**: $7
-- **Description**: Downgrade played **poker hand** to gain **X0.25** Mult
+- **Description**: Downgrade played hand to gain **X0.25** Mult
 
 Played hand must be higher than level 1 for effect to activate.
 
 *Art by C_rry, modified by me. when the jester is skeptical!*
+
+# Exploding Fruitcake
+![Exploding Fruitcake](./sprites/j_exploding_fruitcake.png)
+- **Rarity**: Rare
+- **Base Cost**: $7
+- **Description**: When **Small Blind** begins, give a random **Edition** to all Jokers and consumables, then replace this with a **bobm**
+- Incompatible with **Eternal**
+
+Consumables with Editions still give their effects.
+Edition chances are the same as **The Wheel of Fortune**'s, however, there is also a 0.3% chance for **Negative**.
+
+*the art absolutely sucks*
+
+# bobm
+![bobm](./sprites/j_bobm.png)
+- **Rarity**: Common
+- **Base Cost**: -$4
+- **Description**: **Negative**, **Eternal**. Lose the game after **300** seconds
+- Cannot appear normally
+
+Game speed does not affect the timer.
+Spawns normally from **Exploding Fruitcake**.
+You *will* lose the game when the timer is up.
+
+*the slowest submitted Balatro with skips on White Stake speedrun on speedrun.com is 4 minutes and 31 seconds. good luck.*
+
+# Collectible Card
+![Collectible Card](./sprites/j_rdcards.png)
+- **Rarity**: Rare
+- **Base Cost**: $8
+- **Description**: Each scored card with same **rank** as the **first** scored card gives **+4** Chips to all cards in **full deck** of that rank
