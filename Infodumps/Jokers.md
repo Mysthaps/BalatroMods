@@ -101,7 +101,7 @@ Played hand must be higher than level 1 for effect to activate.
 - **Description**: When **Small Blind** begins, give a random **Edition** to all Jokers and consumables, then replace this with a **bobm**
 - Incompatible with **Eternal**
 
-Consumables with Editions still give their effects.
+Consumables with Editions still give their effects.\
 Edition chances are the same as **The Wheel of Fortune**'s, however, there is also a 0.3% chance for **Negative**.
 
 *the art absolutely sucks*
@@ -113,8 +113,8 @@ Edition chances are the same as **The Wheel of Fortune**'s, however, there is al
 - **Description**: **Negative**, **Eternal**. Lose the game after **300** seconds
 - Cannot appear normally
 
-Game speed does not affect the timer.
-Spawns normally from **Exploding Fruitcake**.
+Game speed does not affect the timer.\
+Spawns normally from **Exploding Fruitcake**.\
 You *will* lose the game when the timer is up.
 
 *the slowest submitted Balatro with skips on White Stake speedrun on speedrun.com is 4 minutes and 31 seconds. good luck.*
@@ -124,3 +124,7 @@ You *will* lose the game when the timer is up.
 - **Rarity**: Rare
 - **Base Cost**: $8
 - **Description**: Each scored card with same **rank** as the **first** scored card gives **+4** Chips to all cards in **full deck** of that rank
+
+*Pulling card...*\
+***Woah!***\
+*@mysthaps got a **Jimbo (Rare)** card! The **Jimbo (Rare)** card has been added to her inventory. The shorthand form of this card is **jimbor**.*
