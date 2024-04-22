@@ -8,8 +8,8 @@ local joker = {
 joker.localization = {
     name = "Suspicious Joker",
     text = {
-        "Downgrades played hand",
-        "to gain {X:mult,C:white} X0.25 {} Mult",
+        "{C:attention}Downgrades{} played hand",
+        "to gain {X:mult,C:white} X0.5 {} Mult",
         "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)"
     }
 }
@@ -20,7 +20,7 @@ joker.calculate = function(self, context)
             return
         end
         level_up_hand(context.blueprint_card or self, context.scoring_name, nil, -1)
-        self.ability.x_mult = self.ability.x_mult + 0.25
+        self.ability.x_mult = self.ability.x_mult + 0.5
         card_eval_status_text((context.blueprint_card or self), 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_xmult', vars = {self.ability.x_mult}}})
     end
 end

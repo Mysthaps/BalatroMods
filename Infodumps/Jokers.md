@@ -88,7 +88,7 @@ Does not count itself as an empty Joker slot. However, it will count **Joker Ste
 ![Jimpostor](./sprites/j_jimpostor.png)
 - **Rarity**: Uncommon
 - **Base Cost**: $7
-- **Description**: Downgrade played hand to gain **X0.25** Mult
+- **Description**: Downgrade played hand to gain **X0.5** Mult
 
 Played hand must be higher than level 1 for effect to activate.
 
@@ -128,3 +128,44 @@ You *will* lose the game when the timer is up.
 *Pulling card...*\
 ***Woah!***\
 *@mysthaps got a **Jimbo (Rare)** card! The **Jimbo (Rare)** card has been added to her inventory. The shorthand form of this card is **jimbor**.*
+
+# Pebbler Joker
+![Pebbler](./sprites/j_pebbler.png)
+- **Rarity**: Uncommon
+- **Base Cost**: $6
+- **Description**: Allows **Stone Cards** to be selected and played past the hand card limit
+- Incompatible with **Blueprint**
+
+*throws rocks at you*
+
+# Jimbo's Prowess
+![Prowess](./sprites/j_prowess.png)
+- **Rarity**: Rare
+- **Base Cost**: $8
+- **Description**: **X1** Mult, plus **X0.75** Mult per difference between ranks of highest ranked card of **Straight** played and last **Straight** played
+
+The difference is counted using the cards' nominal value. (Face cards are 10, Ace is 11)\
+For example, if your last hand played is a ``2 3 4 5 6`` and you play a ``10 J Q K A``, you will get 1 + 0.75 * abs(11 - 6) = 4.75 XMult.
+
+*[QUICK SUPPRESSION! QUICK SUPPRESSION! QUICK SUPPRESSION!](https://www.youtube.com/watch?v=aVbej3Ew0s4)*
+
+# Scratched Card
+![Scratched Card](./sprites/j_scratch_card.png)
+- **Rarity**: Common
+- **Base Cost**: $5
+- **Description**: Gives **+10** Mult and **$5** to **Lucky Card** triggers giving **Mult**
+- Incompatible with **Blueprint**
+
+The +$20 effect from Lucky Cards will not trigger this effect.
+
+*this is the third modded scratch card ever*
+
+# Pictured as Perfect *(requires FusionJokers)*
+![Pictured as Perfect](./sprites/j_pap.png)
+- **Rarity**: Fusion
+- **Base Cost**: $11
+- **Description**: After playing a hand, **+1** discard this blind. After discarding, draw **three** extra cards
+- Incompatible with **Blueprint**
+
+*a maze with edges like their knives*\
+*someday ill be the shape they want me to be*

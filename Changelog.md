@@ -1,5 +1,11 @@
 # Changelog
 
+## April 22nd, 2024
+### **[MystJokers]**
+- Updated the structure of the mod. Now all Jokers are split to their own files that can be found in ``indiv_jokers`` *(thanks dps2004)*
+- Added four new Jokers
+- **Suspicious Joker**: Effect **X0.25** Mult > **X0.5** Mult
+
 ## April 17th, 2024
 ### **[MystJokers]**
 - Updated all Joker's shorthands, now all start with ``j_myst_``

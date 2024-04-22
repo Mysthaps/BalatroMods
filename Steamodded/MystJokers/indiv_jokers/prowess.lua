@@ -1,6 +1,6 @@
 local joker = {
     name = "Jimbo's Prowess", slug = "prowess",
-    config = { extra = {last_nominal = nil, last_rank = nil, last_id = nil }}, rarity = 3, cost = 9,
+    config = { extra = {last_nominal = nil, last_rank = nil, last_id = nil }}, rarity = 3, cost = 8,
     blueprint_compat = true,
     eternal_compat = true
 }

@@ -6,200 +6,60 @@
 --- DISPLAY_NAME: MystJokers
 --- BADGE_COLOUR: EDA9D3
 
--- Blacklist individual Jokers here
-local jokerBlacklists = {
-    polydactyly = false,
-    miracle_milk = false,
-    yield_flesh = false,
-    autism_creature = false,
-    r_key = false,
-    lucky_seven = false,
-    options = false,
-    jimpostor = false, -- Suspicious Joker
-    credits = false,
-    exploding_fruitcake = false, -- will also disable bobm
-    rdcards = false, -- Collectible Card
-}
-
-local localization = {
-    polydactyly = {
-        name = "Polydactyly",
-        text = {
-            "Choose an extra card",
-            "from {C:attention}Booster Packs{}",
-        }
-    },
-    miracle_milk = {
-        name = "Miracle Milk",
-        text = {
-            "{C:attention}Undebuff{} all scored cards",
-            "This Joker gains {C:chips}+8{} Chips per",
-            "{C:attention}undebuffed{} card",
-            "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)"
-        }
-    },
-    yield_flesh = {
-        name = "Yield My Flesh",
-        text = {
-            "{X:mult,C:white} X3 {} Mult after first played",
-            "hand scores less than",
-            "{C:attention}5%{} of required chips"
-        }
-    },
-    autism_creature = {
-        name = "Autism Creature",
-        text = {
-            "{C:mult}+6{} Mult for each",
-            "empty {C:attention}Joker{} slot",
-            "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
-        }
-    },
-    r_key = {
-        name = "R Key",
-        text = {
-            "Sell this Joker to",
-            "reduce Ante by {C:attention}2{},",
-            "down to minimum Ante {C:attention}1{}",
-        }
-    },
-    lucky_seven = {
-        name = "Lucky Seven",
-        text = {
-            "When {C:attention}Blind{} is selected,",
-            "lose {C:money}$3{} and use",
-            "{C:attention}The Wheel of Fortune{}",
-            "{s:0.8}(if possible){}",
-        }
-    },
-    options = {
-        name = "Options",
-        text = {
-            "After playing a hand,",
-            "draw {C:attention}two{} extra cards"
-        }
-    },
-    jimpostor = {
-        name = "Suspicious Joker",
-        text = {
-            "Downgrade played hand",
-            "to gain {X:mult,C:white} X0.25 {} Mult",
-            "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)"
-        }
-    },
-    credits = {
-        name = "Credits",
-        text = {
-            "After discarding,",
-            "draw {C:attention}two{} extra cards"
-        }
-    },
-    exploding_fruitcake = {
-        name = "Exploding Fruitcake",
-        text = {
-            "When {C:attention}Small Blind{} begins, give",
-            "a random {C:dark_edition}Edition{} to all",
-            "Jokers and consumables, then",
-            "replace this with a {C:attention}bobm{}"
-        }
-    },
-    bobm = {
-        name = "bobm",
-        text = {
-            "{C:dark_edition}Negative, Eternal{}",
-            "Lose the game",
-            "after {C:attention}300{} seconds",
-            "{C:inactive}(Time left: #1#s)"
-        }
-    },
-    rdcards = {
-        name = "Collectible Card",
-        text = {
-            "Each scored card with same",
-            "{C:attention}rank{} as {C:attention}first{} scored card",
-            "gives {C:chips}+5{} Chips to all cards",
-            "in {C:attention}full deck{} of that rank",
-        }
-    }
+local joker_list = {
+    "miracle_milk",
+    "lucky_seven",
+    "scratch_card",
+    "polydactyly",
+    "yield_flesh",
+    "pebbler",
+    "autism_creature",
+    "jimpostor", -- Suspicious Joker
+    "options",
+    "credits",
+    "pap",
+    "r_key",
+    "exploding_fruitcake",
+    "bobm",
+    "rdcards", -- Collectible Card
+    "prowess",
 }
 
 function SMODS.INIT.MystJokers()
-    local jokers = {
-        {
-            name = "Polydactyly", slug = "polydactyly",
-            config = {}, rarity = 2, cost = 6, 
-            blueprint_compat = false, 
-            eternal_compat = true
-        },
-        {
-            name = "Miracle Milk", slug = "miracle_milk",
-            config = {extra = 8}, rarity = 1, cost = 4, 
-            blueprint_compat = true, 
-            eternal_compat = true
-        },
-        {
-            name = "Yield My Flesh", slug = "yield_flesh",
-            config = {extra = { Xmult = 3, active = false }},
-            rarity = 2, cost = 7, 
-            blueprint_compat = true, 
-            eternal_compat = true
-        },
-        {
-            name = "R Key", slug = "r_key",
-            config = {}, rarity = 3, cost = 40, 
-            blueprint_compat = false, 
-            eternal_compat = false
-        },
-        {
-            name = "Lucky Seven", slug = "lucky_seven",
-            config = {}, rarity = 1, cost = 3, 
-            blueprint_compat = true, 
-            eternal_compat = true
-        },
-        {
-            name = "Options", slug = "options",
-            config = {extra = 1}, rarity = 2, cost = 5, 
-            blueprint_compat = false, 
-            eternal_compat = true
-        },
-        {
-            name = "Credits", slug = "credits",
-            config = {extra = 1}, rarity = 2, cost = 5, 
-            blueprint_compat = false, 
-            eternal_compat = true
-        },
-        {
-            name = "Autism Creature", slug = "autism_creature",
-            config = {extra = 0}, rarity = 1, cost = 4, 
-            blueprint_compat = true, 
-            eternal_compat = true
-        },
-        {
-            name = "Suspicious Joker", slug = "jimpostor",
-            config = {}, rarity = 2, cost = 7, 
-            blueprint_compat = true, 
-            eternal_compat = true
-        },
-        {
-            name = "Exploding Fruitcake", slug = "exploding_fruitcake",
-            config = {}, rarity = 3, cost = 7, 
-            blueprint_compat = true, -- yes this is literally just bait you get two bobms
-            eternal_compat = false
-        },
-        {
-            name = "bobm", slug = "bobm",
-            config = { extra = 300 }, rarity = 1, cost = -4, 
-            blueprint_compat = false, 
-            eternal_compat = true
-        },
-        {
-            name = "Collectible Card", slug = "rdcards",
-            config = {}, rarity = 3, cost = 8,
-            blueprint_compat = true,
-            eternal_compat = true
-        },
-    }
+    local mod_path = SMODS.findModByID("MystJokers").path
 
-    -- Localization
+    -- basically taken from 5CEBalatro lol
+    for _, v in ipairs(joker_list) do
+        local joker = NFS.load(mod_path.."indiv_jokers/"..v..".lua")()
+
+        -- don't fuck up the mod
+        if not joker then
+            sendErrorMessage("[MystJokers] Cannot find joker with shorthand: "..v)
+        elseif joker.fusion and not SMODS.INIT.FusionJokers then
+            sendWarnMessage("[MystJokers] Cannot find FusionJokers, did not load joker: "..v)
+        else
+            local sprite = NFS.getInfo(mod_path.."assets/2x/j_"..v..".png")
+            if not sprite then
+                sendWarnMessage("[MystJokers] Cannot find sprite ".."j_"..v..".png, fallbacking to blank")
+            end
+
+            SMODS.Joker:new(joker.name, 'myst_'..joker.slug, joker.config, {x = 0, y = 0}, joker.localization, joker.rarity, joker.cost, true, true, joker.blueprint_compat, joker.eternal_compat, "", "j_"..joker.slug):register()
+            SMODS.Sprite:new('j_'..joker.slug, mod_path, (sprite and "j_"..joker.slug or "blank")..".png", 71, 95, "asset_atli"):register()
+
+            if joker.fusion then
+                local fus = joker.fusion
+                FusionJokers.fusions:add_fusion(fus.joker1, fus.stat1, fus.extra1, fus.joker2, fus.stat2, fus.extra2, "j_myst_"..v, joker.cost)
+            end
+
+            if joker.set_ability then SMODS.Jokers['j_myst_'..v].set_ability = joker.set_ability end
+            if joker.calculate then SMODS.Jokers['j_myst_'..v].calculate = joker.calculate end
+            if joker.loc_def then SMODS.Jokers['j_myst_'..v].loc_def = joker.loc_def end
+            if joker.tooltip then SMODS.Jokers['j_myst_'..v].tooltip = joker.tooltip end
+            if joker.yes_pool_flag then SMODS.Jokers['j_myst_'..v].yes_pool_flag = joker.yes_pool_flag end
+            if joker.enhancement_gate then SMODS.Jokers['j_myst_'..v].enhancement_gate = joker.enhancement_gate end
+        end
+    end
+
     G.localization.misc.dictionary.k_cleansed = "Cleansed!"
     G.localization.misc.dictionary.k_wheel = "Wheel!"
     G.localization.descriptions.Joker.j_bobm_tooltip = {
@@ -211,321 +71,27 @@ function SMODS.INIT.MystJokers()
             "{C:inactive}(Time left: 300s)"
         }
     }
-    init_localization()
 
-    -- Add Jokers to center
-    for _, v in ipairs(jokers) do
-        if not jokerBlacklists[v.slug] then
-            SMODS.Joker:new(v.name, 'myst_'..v.slug, v.config, {x = 0, y = 0}, localization[v.slug], v.rarity, v.cost, true, true, v.blueprint_compat, v.eternal_compat, "", "j_"..v.slug):register()
-            SMODS.Sprite:new('j_'..v.slug, SMODS.findModByID("MystJokers").path, "j_"..v.slug..".png", 71, 95, "asset_atli"):register()
-        end
-    end
-
-    --- Lame joker abilities ---
-    -- Miracle Milk
-    if not jokerBlacklists.miracle_milk then
-        SMODS.Jokers.j_myst_miracle_milk.calculate = function(self, context)
-            if context.cardarea == G.jokers and context.before and context.scoring_hand and not context.blueprint then
-                local cleanses = 0
-                for _, v in ipairs(context.scoring_hand) do
-                    if v.debuff then
-                        cleanses = cleanses + 1
-                        v.debuff = false
-                        G.E_MANAGER:add_event(Event({
-                            func = function()
-                                v:juice_up()
-                                return true
-                            end
-                        }))
-                    end
-                end
-
-                if cleanses > 0 then
-                    self.ability.extra = self.ability.extra + 8 * cleanses
-                    return {
-                        message = localize('k_cleansed'),
-                        colour = G.C.JOKER_GREY,
-                        card = self
-                    }
-                end
-            end
-
-            if SMODS.end_calculate_context(context) then
-                return {
-                    message = localize{type='variable',key='a_chips',vars={self.ability.extra}},
-                    chip_mod = self.ability.extra, 
-                    colour = G.C.CHIPS
-                }
-            end
-        end
-
-        SMODS.Jokers.j_myst_miracle_milk.loc_def = function(self)
-            return { self.ability.extra }
-        end
-    end
-
-    -- Yield My Flesh
-    if not jokerBlacklists.yield_flesh then 
-        SMODS.Jokers.j_myst_yield_flesh.calculate = function(self, context)
-            if context.first_hand_drawn then
-                local eval = function() return G.GAME.current_round.hands_played == 0 end
-                juice_card_until(self, eval, true)
-            end
-
-            if context.scored_chips and context.after and not context.blueprint then
-                if G.GAME.current_round.hands_played == 0 and context.scored_chips / G.GAME.blind.chips <= 0.05 then
-                    self.ability.extra.active = true
-                    return {
-                        message = localize('k_active_ex'),
-                        colour = G.C.FILTER
-                    }
-                end
-            end
-
-            if context.end_of_round and not context.blueprint then
-                self.ability.extra.active = false
-            end
-
-            if SMODS.end_calculate_context(context) then
-                if self.ability.extra.active then
-                    return {
-                        message = localize { type = 'variable', key = 'a_xmult', vars = { self.ability.extra.Xmult } },
-                        Xmult_mod = self.ability.extra.Xmult,
-                    }
-                end
-            end
-        end
-    end
-
-    -- Autism Creature
-    if not jokerBlacklists.autism_creature then
-        SMODS.Jokers.j_myst_autism_creature.calculate = function(self, context)
-            if SMODS.end_calculate_context(context) then
-                if self.ability.extra > 0 then
-                    return {
-                        message = localize { type = 'variable', key = 'a_mult', vars = { self.ability.extra } },
-                        mult_mod = self.ability.extra,
-                    }
-                end
-            end
-        end
-
-        SMODS.Jokers.j_myst_autism_creature.loc_def = function(self)
-            return { self.ability.extra }
-        end
-    end
-
-    -- R Key
-    if not jokerBlacklists.r_key then
-        SMODS.Jokers.j_myst_r_key.set_ability = function(self, center, initial, delay_sprites)
-            self.sell_cost = 0
-        end
-
-        SMODS.Jokers.j_myst_r_key.calculate = function(self, context)
-            if context.selling_self then
-                G.E_MANAGER:add_event(Event({
-                    func = (function()
-                        for _ = 1, 2 do
-                            if G.GAME.round_resets.blind_ante <= 1 or G.GAME.round_resets.ante <= 1 then break end
-
-                            ease_ante(-1)
-                            G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
-                            G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante - 1
-                            delay(0.2)
-                        end
-                        play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
-                        play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
-                        return true
-                    end)
-                }))
-            end
-        end
-    end
-
-    -- Lucky Seven
-    if not jokerBlacklists.lucky_seven then
-        SMODS.Jokers.j_myst_lucky_seven.calculate = function(self, context)
-            if context.setting_blind and not self.getting_sliced then
-                local can_trigger = false
-                for _, v in pairs(G.jokers.cards) do
-                    if v.ability.set == "Joker" and not v.edition then
-                        can_trigger = true
-                    end
-                end
-
-                if can_trigger then
-                    G.E_MANAGER:add_event(Event({
-                        trigger = 'after',
-                        delay = 0.5,
-                        func = function()
-                            local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W/2, G.play.T.y + G.play.T.h/2-G.CARD_H/2, G.CARD_W, G.CARD_H, 
-                            G.P_CARDS.empty, G.P_CENTERS["c_wheel_of_fortune"], {bypass_discovery_center = true, bypass_discovery_ui = true})
-                            card.cost = 0
-                            card:update()
-                            G.FUNCS.use_card({config = {ref_table = card}})
-                            card:start_materialize()
-
-                            ease_dollars(-3)
-                        return true
-                        end
-                    }))
-                end
-            end
-        end
-
-        SMODS.Jokers.j_myst_lucky_seven.tooltip = function(self, info_queue)
-            info_queue[#info_queue+1] = G.P_CENTERS.c_wheel_of_fortune
-        end
-    end
-
-    -- Options
-    if not jokerBlacklists.options then
-        SMODS.Jokers.j_myst_options.set_ability = function(self, center, initial, delay_sprites)
-            self.ability.extra = G.GAME.current_round.hands_played + 1
-        end
-
-        SMODS.Jokers.j_myst_options.calculate = function(self, context)
-            if context.setting_blind and not self.getting_sliced and not context.blueprint then
-                self.ability.extra = 1
-            end
-        end
-    end
-
-    -- Suspicious Joker sussy baka
-    if not jokerBlacklists.jimpostor then
-        SMODS.Jokers.j_myst_jimpostor.calculate = function(self, context)
-            if context.cardarea == G.jokers and context.before and not context.blueprint then
-                if G.GAME.hands[context.scoring_name].level <= 1 then
-                    return
-                end
-                level_up_hand(context.blueprint_card or self, context.scoring_name, nil, -1)
-                self.ability.x_mult = self.ability.x_mult + 0.25
-                card_eval_status_text((context.blueprint_card or self), 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_xmult', vars = {self.ability.x_mult}}})
-            end
-        end
-
-        SMODS.Jokers.j_myst_jimpostor.loc_def = function(self)
-            return { self.ability.x_mult }
-        end
-    end
-
-    -- Credits
-    if not jokerBlacklists.credits then
-        SMODS.Jokers.j_myst_credits.set_ability = function(self, center, initial, delay_sprites)
-            self.ability.extra = G.GAME.current_round.discards_used + 1
-        end
-
-        SMODS.Jokers.j_myst_credits.calculate = function(self, context)
-            if context.setting_blind and not self.getting_sliced and not context.blueprint then
-                self.ability.extra = 1
-            end
-        end
-    end
-
-    -- Exploding Fruitcake
-    if not jokerBlacklists.exploding_fruitcake then
-        SMODS.Jokers.j_myst_exploding_fruitcake.calculate = function(self, context)
-            if context.first_hand_drawn then
-                if G.GAME.blind and G.GAME.blind:get_type() == 'Small' then
-                    -- Editions
-                    for _, v in ipairs(G.jokers.cards) do
-                        if v ~= self and not v.edition then
-                            local edition = poll_edition('exploding_fruitcake_jokers', nil, false, true)
-                            v:set_edition(edition)
-                        end
-                    end
-
-                    for _, v in ipairs(G.consumeables.cards) do
-                        if not v.edition then
-                            local edition = poll_edition('exploding_fruitcake_consumeables', nil, false, true)
-                            v:set_edition(edition)
-                        end
-                    end
-
-                    G.E_MANAGER:add_event(Event({
-                        trigger = 'after',
-                        delay = 0.5,
-                        func = function()    
-                            self:flip()
-                            self:set_ability(G.P_CENTERS['j_bobm'], false, true)
-                            play_sound('card1', 1.1)
-                            return true
-                        end
-                    }))
-
-                    G.E_MANAGER:add_event(Event({
-                        trigger = 'after',
-                        delay = 0.5,
-                        func = function()
-                            delay(1.2)  
-                            self:flip()
-                            return true
-                        end
-                    }))
-                end
-            end
-        end
-
-        SMODS.Jokers.j_myst_exploding_fruitcake.tooltip = function(self, info_queue)
-            info_queue[#info_queue+1] = {key = 'j_bobm_tooltip', set = 'Joker', vars = {300}}
-        end
-
-        SMODS.Jokers.j_myst_exploding_fruitcake.loc_def = function(self)
-            return {}
-        end
-
-        -- bobm
-        -- remove bobm from pools
-        SMODS.Jokers.j_myst_bobm.yes_pool_flag = "this_flag_will_never_be_added_to_pools"
-
-        SMODS.Jokers.j_myst_bobm.set_ability = function(self, center, initial, delay_sprites)
-            self:set_edition({negative = true})
-            self.ability.eternal = true
-        end
-        
-        SMODS.Jokers.j_myst_bobm.loc_def = function(self)
-            if not self.ability.extra then return { 300 } end
-            return { math.floor(self.ability.extra) }
-        end
-    end
-
-    -- Collectible Card
-    if not jokerBlacklists.rdcards then
-        SMODS.Jokers.j_myst_rdcards.set_ability = function(self, center, initial, delay_sprites)
-            self.T.h = self.T.h / 1.33333
-        end
-
-        SMODS.Jokers.j_myst_rdcards.calculate = function(self, context)
-            if context.individual and context.cardarea == G.play then
-                local id = context.scoring_hand[1]:get_id()
-                    if context.other_card:get_id() == id then
-                    for _, v in ipairs(G.playing_cards) do
-                        if v:get_id() == id then
-                            v.ability.perma_bonus = v.ability.perma_bonus or 0
-                            v.ability.perma_bonus = v.ability.perma_bonus + 5
-                        end
-                    end
-
-                    return {
-                        extra = {message = localize('k_upgrade_ex'), colour = G.C.CHIPS},
-                        colour = G.C.CHIPS,
-                        card = self
-                    }
-                end
-            end
-        end
-    end
-    
-    sendDebugMessage("Loaded MystJokers~")
+    sendInfoMessage("Loaded MystJokers~")
 end
 
---- the good shit ---
--- Game variables
-local init_game_objectref = Game.init_game_object
-function Game.init_game_object(self)
-    local t = init_game_objectref(self)
+---- Other functions ----
 
-    return t
+-- find_joker but keys
+local function find_joker_with_key(key, non_debuff)
+    local jokers = {}
+    if not G.jokers or not G.jokers.cards then return {} end
+    for _, v in pairs(G.jokers.cards) do
+        if v and type(v) == 'table' and v.config.center.key == key and (non_debuff or not v.debuff) then
+            table.insert(jokers, v)
+        end
+    end
+    for _, v in pairs(G.consumeables.cards) do
+        if v and type(v) == 'table' and v.config.center.key == key and (non_debuff or not v.debuff) then
+            table.insert(jokers, v)
+        end
+    end
+    return jokers
 end
 
 -- Card updates
@@ -616,16 +182,20 @@ function G.FUNCS.evaluate_play(self, e)
     end
 end
 
--- Options / Credits
+-- Options / Credits / Pictured as Perfect
 local draw_from_deck_to_handref = G.FUNCS.draw_from_deck_to_hand
 function G.FUNCS.draw_from_deck_to_hand(self, e)
     draw_from_deck_to_handref(self, e)
 
     for _, v in ipairs(G.jokers.cards) do
-        if G.STATE == G.STATES.DRAW_TO_HAND then
-            if v.config.center.key == "j_myst_options" and G.GAME.current_round.hands_played == v.ability.extra or 
-            v.config.center.key == "j_myst_credits" and G.GAME.current_round.discards_used == v.ability.extra and not v.debuff then
+        if G.STATE == G.STATES.DRAW_TO_HAND and not v.debuff then
+            if v.config.center.key == "j_myst_options" and G.GAME.current_round.hands_played == v.ability.extra or
+            v.config.center.key == "j_myst_credits" and G.GAME.current_round.discards_used == v.ability.extra then
                 for i = 1, 2 do draw_card(G.deck, G.hand, i*100/2, 'up', true) end
+                v.ability.extra = v.ability.extra + 1
+            end
+            if v.config.center.key == "j_myst_pap" and G.GAME.current_round.discards_used == v.ability.extra then
+                for i = 1, 3 do draw_card(G.deck, G.hand, i*100/2, 'up', true) end
                 v.ability.extra = v.ability.extra + 1
             end
         end
@@ -639,4 +209,77 @@ function Card.set_cost(self)
     if self.config.center.key == "j_myst_r_key" then
         self.sell_cost = 0
     end
+end
+
+-- Pebbler Joker
+local add_to_highlightedref = CardArea.add_to_highlighted
+function CardArea.add_to_highlighted(self, card, silent)
+    if self.config.type == "hand" then
+        local stone_count = 0
+        if next(find_joker_with_key("j_myst_pebbler")) then
+            for _, v in ipairs(G.hand.highlighted) do
+                if v.ability.effect == "Stone Card" then
+                    stone_count = stone_count + 1
+                end
+            end
+            if #self.highlighted - stone_count < self.config.highlighted_limit or card.ability.effect == "Stone Card" then
+                self.highlighted[#self.highlighted+1] = card
+                card:highlight(true)
+                if not silent then play_sound('cardSlide1') end
+
+                if self == G.hand and G.STATE == G.STATES.SELECTING_HAND then
+                    self:parse_highlighted()
+                end
+                return
+            end
+        end
+    end
+    add_to_highlightedref(self, card, silent)
+end
+
+local can_playref = G.FUNCS.can_play
+function G.FUNCS.can_play(e)
+    can_playref(e)
+    local stone_count = 0
+    if next(find_joker_with_key("j_myst_pebbler")) then
+        for _, v in ipairs(G.hand.highlighted) do
+            if v.ability.effect == "Stone Card" then
+                stone_count = stone_count + 1
+            end
+        end
+
+        if not G.GAME.blind.block_play and #G.hand.highlighted - stone_count <= 5 then 
+            e.config.colour = G.C.BLUE
+            e.config.button = 'play_cards_from_highlighted'
+        end
+    end
+end
+
+-- Scratched Card
+local get_p_dollarsref = Card.get_p_dollars
+function Card.get_p_dollars(self)
+    local ret = 0
+    for _, v in ipairs(G.jokers.cards) do
+        if not v.debuff and v.config.center.key == "j_myst_scratch_card" then
+            if self.lucky_trigger then
+                ret = ret + 5
+            end
+        end
+    end
+    ret = ret + get_p_dollarsref(self)
+    G.GAME.dollar_buffer = ret
+    return ret
+end
+
+local get_chip_multref = Card.get_chip_mult
+function Card.get_chip_mult(self)
+    local ret = get_chip_multref(self)
+    for _, v in ipairs(G.jokers.cards) do
+        if not v.debuff and v.config.center.key == "j_myst_scratch_card" then
+            if self.lucky_trigger then
+                ret = ret + 10
+            end
+        end
+    end
+    return ret
 end
