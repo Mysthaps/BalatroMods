@@ -1,5 +1,8 @@
 ### A collection of mods made by Myst for the game Balatro.
 
+# Notes
+For **MystBlinds**, **The Monster** and **Noir Silence** are currently broken due to a Steamodded issue. This will be addressed in next Steamodded update.
+
 # Mods
 - **MystJokers**: Adds more Jokers to the game.
 - **GoldenChallenge**: Adds the challenge "Golden".
@@ -20,4 +23,4 @@ Yippee Joker sprite by C_rry\
 Balamod port by UwUDev
 
 # Requirements
-Requires [Steamodded](https://github.com/Steamopollys/Steamodded) v0.9.2 or [Balamod](https://github.com/UwUDev/balamod) v0.1.10, depending on the loader you choose.
+Requires the latest [Steamodded](https://github.com/Steamopollys/Steamodded) or [Balamod](https://github.com/UwUDev/balamod) v0.1.10, depending on the loader you choose.

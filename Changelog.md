@@ -1,5 +1,10 @@
 # Changelog
 
+## April 27th, 2024
+### **[HouseRules]**
+- Added 3(?) new modifiers
+- Updated and optimized some code
+
 ## April 22nd, 2024
 ### **[MystJokers]**
 - Updated the structure of the mod. Now all Jokers are split to their own files that can be found in ``indiv_jokers`` *(thanks dps2004)*
