@@ -1,0 +1,33 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# Inject one or more lines of code before, after, or at (replacing) a line which matches the provided pattern.
+# USEFUL: For when you need to add / modify a small amount of code to setup initialization routines, etc.
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = "if blind_obj and blind_obj.modify_hand and type(blind_obj.modify_hand) == 'function' and not self.debuff then"
+position = "at"
+payload = "if blind_obj and blind_obj.modify_hand and type(blind_obj.modify_hand) == 'function' and not self.disabled then"
+match_indent = true
+overwrite = false
+
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = "return blind_obj.modify_hand(cards, poker_hands, text, mult, hand_chips)"
+position = "at"
+payload = "return blind_obj.modify_hand(self, cards, poker_hands, text, mult, hand_chips)"
+match_indent = true
+overwrite = false
+
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = "blind_obj.set_blind(self, silent)"
+position = "at"
+payload = "blind_obj.defeat(self, silent)"
+match_indent = true
+overwrite = false

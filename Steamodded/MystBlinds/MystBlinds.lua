@@ -3,191 +3,53 @@
 --- MOD_ID: MystBlinds
 --- MOD_AUTHOR: [Mysthaps]
 --- MOD_DESCRIPTION: A pack of Blinds
+--- DISPLAY_NAME: MystBlinds
+--- BADGE_COLOUR: EDA9D3
 
-local localization = {
-    bl_market = {
-        name = "The Market",
-        text = {
-            "Lose 25% of scored chips",
-            "after each hand played"
-        }
-    },
-    bl_stone = {
-        name = "The Stone",
-        text = {
-            "All Enhanced cards",
-            "are debuffed"
-        }
-    },
-    bl_monster = {
-        name = "The Monster",
-        text = {
-            "Destroy all consumables,",
-            "0 consumable slots"
-        }
-    },
-    bl_insect = {
-        name = "The Insect",
-        text = {
-            "Debuff leftmost Joker",
-            "whenever cards are drawn"
-        }
-    },
-    bl_noir_silence = {
-        name = "Noir Silence",
-        text = {
-            "-4 Hand Size, +1 Hand Size",
-            "after each hand played"
-        }
-    },
-}
+local blind_list = {
+    "market",
+    "stone",
+    "monster",
+    "insect",
+    "final_silence",
+    "bird",
+    "ancestor",
+    "final_mist",
 
-local blinds = {
-    -- SMODS.Blind:new(name, slug, loc_txt, dollars, mult, vars, debuff, pos, boss, boss_colour, defeated, atlas)
-    SMODS.Blind:new(
-        "The Market", "market", localization.bl_market,
-        5, 2, 
-        {}, {},
-        {x = 0, y = 0}, {min = 3, max = 10},
-        HEX('76C860'), true, "MystBlinds"
-    ),
-    SMODS.Blind:new(
-        "The Stone", "stone", localization.bl_stone,
-        5, 2, 
-        {}, {},
-        {x = 0, y = 1}, {min = 2, max = 10},
-        HEX('85898C'), true, "MystBlinds"
-    ),
-    SMODS.Blind:new(
-        "The Monster", "monster", localization.bl_monster,
-        5, 2, 
-        {}, {},
-        {x = 0, y = 2}, {min = 2, max = 10},
-        HEX('3C074D'), true, "MystBlinds"
-    ),
-    SMODS.Blind:new(
-        "The Insect", "insect", localization.bl_insect,
-        5, 2, 
-        {}, {},
-        {x = 0, y = 3}, {min = 3, max = 10},
-        HEX('873E2C'), true, "MystBlinds"
-    ),
-    SMODS.Blind:new(
-        "Noir Silence", "noir_silence", localization.bl_noir_silence,
-        8, 2, 
-        {}, {},
-        {x = 0, y = 4}, {showdown = true, min = 10, max = 10},
-        HEX('404040'), true, "MystBlinds"
-    ),
+    -- The Monster and Noir Silence are disabled until the next Steamodded release
 }
 
 function SMODS.INIT.MystBlinds()
-    sendDebugMessage("Loaded MystBlinds~")
-
-    -- Blinds
-    for _, v in ipairs(blinds) do
-        v:register()
-    end
-
-    -- Sprites
+    local mod_path = SMODS.findModByID("MystBlinds").path
     SMODS.Sprite:new("MystBlinds", SMODS.findModByID("MystBlinds").path, "MystBlinds.png", 34, 34, "animation_atli", 21):register()
 
-    -- Blinds
-    ---- The Market
-    SMODS.Blinds.bl_market.set_blind = function(self, blind, reset, silent)
-        self.prepped = nil
-        self.discards_sub = 1
-    end
+    G.localization.misc.dictionary.ph_ancestor = "(Round * 1.5)"
 
-    SMODS.Blinds.bl_market.press_play = function(self)
-        self.prepped = true
-    end
+    -- basically taken from 5CEBalatro lol
+    for k, v in ipairs(blind_list) do
+        local blind = NFS.load(mod_path.."indiv_blinds/"..v..".lua")()
 
-    SMODS.Blinds.bl_market.drawn_to_hand = function(self)
-        if G.GAME.current_round.hands_played == self.discards_sub then
-            self:wiggle()
-            G.E_MANAGER:add_event(Event({
-                trigger = 'ease',
-                blocking = false,
-                ref_table = G.GAME,
-                ref_value = 'chips',
-                ease_to = G.GAME.chips - math.floor(G.GAME.chips/4),
-                delay =  0.5,
-                func = (function(t) return math.floor(t) end)
-            }))
-            self.discards_sub = self.discards_sub + 1
+        -- don't fuck up the mod
+        if not blind then
+            sendErrorMessage("[MystBlinds] Cannot find blind with shorthand: "..v)
+        else
+            SMODS.Blind:new(blind.name, 'myst_'..blind.slug, blind.localization, blind.dollars, blind.mult, blind.vars, blind.debuff, {x = 0, y = k-1}, blind.boss, blind.color, true, "MystBlinds"):register()
+
+            if blind.set_blind then SMODS.Blinds['bl_myst_'..v].set_blind = blind.set_blind end
+            if blind.disable then SMODS.Blinds['bl_myst_'..v].disable = blind.disable end
+            if blind.defeat then SMODS.Blinds['bl_myst_'..v].defeat = blind.defeat end
+            if blind.debuff_card then SMODS.Blinds['bl_myst_'..v].debuff_card = blind.debuff_card end
+            if blind.stay_flipped then SMODS.Blinds['bl_myst_'..v].stay_flipped = blind.stay_flipped end
+            if blind.drawn_to_hand then SMODS.Blinds['bl_myst_'..v].drawn_to_hand = blind.drawn_to_hand end
+            if blind.debuff_hand then SMODS.Blinds['bl_myst_'..v].debuff_hand = blind.debuff_hand end
+            if blind.modify_hand then SMODS.Blinds['bl_myst_'..v].modify_hand = blind.modify_hand end
+            if blind.press_play then SMODS.Blinds['bl_myst_'..v].press_play = blind.press_play end
+            if blind.get_loc_debuff_text then SMODS.Blinds['bl_myst_'..v].get_loc_debuff_text = blind.get_loc_debuff_text end
+            if blind.loc_def then SMODS.Blinds['bl_myst_'..v].loc_def = blind.loc_def end
         end
     end
 
-    ---- The Stone
-    SMODS.Blinds.bl_stone.debuff_card = function(self, card, from_blind)
-        if card.area ~= G.jokers and card.config.center ~= G.P_CENTERS.c_base then
-            card:set_debuff(true)
-            return
-        end
-    end
-
-    ---- The Monster
-    SMODS.Blinds.bl_monster.set_blind = function(self, blind, reset, silent)
-        G.GAME.consumeable_buffer = 0
-
-        ---- check for Chicot
-        local has_chicot = false
-        for _, v in ipairs(G.jokers.cards) do
-            if v.ability.name == "Chicot" then has_chicot = true end
-        end
-
-        if not has_chicot then
-            for k, v in ipairs(G.consumeables.cards) do
-                v:start_dissolve(nil, (k ~= 1))
-            end
-
-            self.hands_sub = G.consumeables.config.card_limit
-            G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.hands_sub
-        end
-    end
-    SMODS.Blinds.bl_monster.disable = function(self)
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit + self.hands_sub
-    end
-    SMODS.Blinds.bl_monster.defeat = function(self, silent)
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit + self.hands_sub
-    end
-
-    ---- The Insect
-    SMODS.Blinds.bl_insect.drawn_to_hand = function(self)
-        if G.jokers and G.jokers.cards[1] and not G.jokers.cards[1].debuffed then
-            G.jokers.cards[1]:set_debuff(true)
-            G.jokers.cards[1]:juice_up()
-            self:wiggle()
-        end
-    end
-
-    ---- Noir Silence
-    SMODS.Blinds.bl_noir_silence.set_blind = function(self, blind, reset, silent)
-        self.prepped = nil
-        self.discards_sub = 1
-        self.hands_sub = math.min(G.hand.config.card_limit - 1, 4)
-        G.hand:change_size(-self.hands_sub)
-    end
-
-    SMODS.Blinds.bl_noir_silence.disable = function(self)
-        G.hand:change_size(self.hands_sub)
-    end
-
-    SMODS.Blinds.bl_noir_silence.defeat = function(self, silent)
-        G.hand:change_size(self.hands_sub)
-    end
-
-    SMODS.Blinds.bl_noir_silence.press_play = function(self)
-        self.prepped = true
-    end
-
-    SMODS.Blinds.bl_noir_silence.drawn_to_hand = function(self)
-        if G.GAME.current_round.hands_played == self.discards_sub then
-            G.hand:change_size(1)
-            self.discards_sub = self.discards_sub + 1 -- hands played
-            self.hands_sub = self.hands_sub - 1 -- size removed
-            self:wiggle()
-        end
-    end
+    sendInfoMessage("Loaded MystBlinds~")
 end
+
+---- Other functions ----

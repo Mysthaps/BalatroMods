@@ -1,7 +1,4 @@
-### A collection of mods made by Myst for the game Balatro.
-
-# Notes
-For **MystBlinds**, **The Monster** and **Noir Silence** are currently broken due to a Steamodded issue. This will be addressed in next Steamodded update.
+### A collection of mods made by Mysthaps for the game Balatro.
 
 # Mods
 - **MystJokers**: Adds more Jokers to the game.
@@ -23,4 +20,4 @@ Yippee Joker sprite by C_rry\
 Balamod port by UwUDev
 
 # Requirements
-Requires the latest [Steamodded](https://github.com/Steamopollys/Steamodded) or [Balamod](https://github.com/UwUDev/balamod) v0.1.10, depending on the loader you choose.
+Requires the latest [Steamodded](https://github.com/Steamopollys/Steamodded) with [Lovely](https://github.com/ethangreen-dev/lovely-injector) or [Balamod](https://github.com/UwUDev/balamod) v0.1.10, depending on the loader you choose.

@@ -2,7 +2,7 @@
 ![The Market](./sprites/the_market.gif)
 - **Reward**: $$$$$
 - **Required Score**: **X2** Base
-- **Minimum Ante**: 3
+- **Minimum Ante**: 2
 - **Description**: *Lose 25% of scored chips after each hand played*
 
 (If you score enough to beat the Blind, your score will not be reduced.)
@@ -40,6 +40,28 @@
 
 *toki pona: pipi*
 
+# The Bird
+![The Bird](./sprites/the_bird.gif)
+- **Reward**: $$$$$
+- **Required Score**: **X2** Base
+- **Minimum Ante**: 1
+- **Description**: *Apply a random sticker to a Joker each hand*
+
+(It always respects ``eternal_compat`` and ``perishable_compat``.)
+
+*toki pona: waso*
+
+# The Ancestor
+![The Ancestor](./sprites/the_ancestor.gif)
+- **Reward**: $$$$$
+- **Required Score**: **X2** Base
+- **Minimum Ante**: 1
+- **Description**: *(Round * 1.5) cards from deck are drawn face down*
+
+(The value is rounded up.)
+
+*toki pona: mama*
+
 # Noir Silence **(Showdown)**
 ![Noir Silence](./sprites/noir_silence.gif)
 - **Reward**: $$$$$$$$
@@ -50,3 +72,12 @@
 (Cannot bring Hand Size below 1.)
 
 *Jimbo, you have to feel the same sorrow as mine... No. you have to feel even worse than that.*
+
+# Scarlet Mist **(Showdown)**
+![Scarlet Mist](./sprites/final_mist.gif)
+- **Reward**: $$$$$$$$
+- **Required Score**: **X2** Base
+- **Minimum Ante**: Showdown
+- **Description**: *Halves Base Mult, sets Base Chips to Base Mult*
+
+*Among the many Jokers of the Backstreets, she was one of the few who could go toe to toe with The Head and The Club.*
