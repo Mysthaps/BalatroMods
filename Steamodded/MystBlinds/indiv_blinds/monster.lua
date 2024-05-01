@@ -26,8 +26,11 @@ blind.set_blind = function(self, blind, reset, silent)
             v:start_dissolve(nil, (k ~= 1))
         end
 
-        self.hands_sub = G.consumeables.config.card_limit
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.hands_sub
+        G.E_MANAGER:add_event(Event({trigger = 'immediate', func = function()
+            self.hands_sub = G.consumeables.config.card_limit
+            G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.hands_sub
+            return true
+        end}))
     end
 end
 blind.disable = function(self)

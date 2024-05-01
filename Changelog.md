@@ -1,10 +1,14 @@
 # Changelog
+## May 1st, 2024
+### **[MystBlinds]**
+- Fixed **The Monster** removing consumable slots from **Negative** cards twice
+
 ## April 28th, 2024
 ### **[MystBlinds]**
 - Updated the structure of the mod. Now all blinds are split to their own files that can be found in ``indiv_blinds``
 - Updated all blinds' shorthands, now all start with ``bl_myst_``
 - Now requires **Lovely** to be used
-  - Fixes The Monster and Noir Silence not giving back consumable slots/hand size after defeated
+  - Fixes **The Monster** and **Noir Silence** not giving back consumable slots/hand size after defeated
 - Added 3 new blinds
 - The Market mininum Ante **3** > **2**
 
