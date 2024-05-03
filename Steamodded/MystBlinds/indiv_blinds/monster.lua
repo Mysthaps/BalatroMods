@@ -19,6 +19,7 @@ blind.localization = {
 
 blind.set_blind = function(self, blind, reset, silent)
     G.GAME.consumeable_buffer = 0
+    self.hands_sub = 0
 
     ---- check for Chicot
     if not next(find_joker("Chicot")) then

@@ -1,4 +1,8 @@
 # Changelog
+## May 3rd, 2024
+### **[MystBlinds]**
+- Fixed **The Monster** crashing with **Chicot**
+
 ## May 1st, 2024
 ### **[MystBlinds]**
 - Fixed **The Monster** removing consumable slots from **Negative** cards twice
