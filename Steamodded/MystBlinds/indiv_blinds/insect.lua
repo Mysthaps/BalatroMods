@@ -6,19 +6,31 @@ local blind = {
     vars = {}, 
     debuff = {},
     boss = {min = 3, max = 10},
-    color = HEX('873E2C')
-}
-
-blind.localization = {
-    name = "The Insect",
-    text = {
-        "Debuff leftmost Joker",
-        "whenever cards are drawn"
+    boss_colour = HEX('873E2C'),
+    loc_txt = {
+        ['default'] = {
+            name = "The Insect",
+            text = {
+                "Debuffs leftmost Joker",
+                "every hand"
+            }
+        },
+        ['tp'] = {
+            name = "󱥽󱥑",
+            text = {
+                "Debuffs leftmost Joker",
+                "every hand"
+            }
+        }
     }
 }
 
+blind.press_play = function(self)
+    self.prepped = true
+end
+
 blind.drawn_to_hand = function(self)
-    if G.jokers and G.jokers.cards[1] and not G.jokers.cards[1].debuffed then
+    if G.jokers and G.jokers.cards[1] and not G.jokers.cards[1].debuff and self.prepped then
         G.jokers.cards[1]:set_debuff(true)
         G.jokers.cards[1]:juice_up()
         self:wiggle()

@@ -6,15 +6,27 @@ local blind = {
     vars = {localize('ph_ancestor')}, 
     debuff = {},
     boss = {min = 1, max = 10},
-    color = HEX('D274CD')
-}
-
-blind.localization = {
-    name = "The Ancestor",
-    text = {
-        "#1# cards from your deck",
-        "are drawn face down"
-    }
+    boss_colour = HEX('D274CD'),
+    loc_txt = {
+        ['default'] = {
+            name = "The Ancestor",
+            text = {
+                "#1# cards from your deck",
+                "are drawn face down"
+            }
+        },
+        ['tp'] = {
+            name = "󱥽󱤱",
+            text = {
+                "#1# cards from your deck",
+                "are drawn face down"
+            }
+        },
+    },
+    process_loc_text = function(self)
+        SMODS.Blind.process_loc_text(self)
+        SMODS.process_loc_text(G.localization.misc.dictionary, "ph_ancestor", "(Round * 1.5)")
+    end
 }
 
 blind.set_blind = function(self, blind, reset, silent)

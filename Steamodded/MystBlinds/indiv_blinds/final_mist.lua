@@ -6,14 +6,13 @@ local blind = {
     vars = {}, 
     debuff = {},
     boss = {showdown = true, min = 10, max = 10},
-    color = HEX('CA1C1C')
-}
-
-blind.localization = {
-    name = "Scarlet Mist",
-    text = {
-        "Halves Base Mult, sets",
-        "Base Chips to Base Mult"
+    boss_colour = HEX('CA1C1C'),
+    loc_txt = {
+        name = "Scarlet Mist",
+        text = {
+            "Halves Base Mult, sets",
+            "Base Chips to Base Mult"
+        }
     }
 }
 

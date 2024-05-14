@@ -3,31 +3,15 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
-# Inject one or more lines of code before, after, or at (replacing) a line which matches the provided pattern.
-# USEFUL: For when you need to add / modify a small amount of code to setup initialization routines, etc.
 [[patches]]
 [patches.pattern]
-target = "main.lua"
-pattern = "if blind_obj and blind_obj.modify_hand and type(blind_obj.modify_hand) == 'function' and not self.debuff then"
-position = "at"
-payload = "if blind_obj and blind_obj.modify_hand and type(blind_obj.modify_hand) == 'function' and not self.disabled then"
-match_indent = true
-overwrite = false
-
-[[patches]]
-[patches.pattern]
-target = "main.lua"
-pattern = "return blind_obj.modify_hand(cards, poker_hands, text, mult, hand_chips)"
-position = "at"
-payload = "return blind_obj.modify_hand(self, cards, poker_hands, text, mult, hand_chips)"
-match_indent = true
-overwrite = false
-
-[[patches]]
-[patches.pattern]
-target = "main.lua"
-pattern = "blind_obj.set_blind(self, silent)"
-position = "at"
-payload = "blind_obj.defeat(self, silent)"
+target = "functions/UI_definitions.lua"
+pattern = "local loc_target = localize{type = 'raw_descriptions', key = blind_choice.config.key, set = 'Blind', vars = {localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands')}}"
+position = "after"
+payload = '''
+if blind_choice.config.key == 'bl_myst_ancestor' then
+    loc_target = localize{type = 'raw_descriptions', key = blind_choice.config.key, set = 'Blind', vars = {math.ceil((G.GAME.round + 1) * 1.5)}}
+end
+'''
 match_indent = true
 overwrite = false

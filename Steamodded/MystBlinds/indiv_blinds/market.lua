@@ -6,14 +6,22 @@ local blind = {
     vars = {}, 
     debuff = {},
     boss = {min = 2, max = 10},
-    color = HEX('76C860')
-}
-
-blind.localization = {
-    name = "The Market",
-    text = {
-        "Lose 25% of scored chips",
-        "after each hand played"
+    boss_colour = HEX('76C860'),
+    loc_txt = {
+        ['default'] = {
+            name = "The Market",
+            text = {
+                "Lose 25% of scored chips",
+                "after each hand played"
+            }
+        },
+        ['tp'] = {
+            name = "󱥽󱤋",
+            text = {
+                "Lose 25% of scored chips",
+                "after each hand played"
+            }
+        }
     }
 }
 
@@ -26,7 +34,7 @@ blind.press_play = function(self)
 end
 
 blind.drawn_to_hand = function(self)
-    if G.GAME.current_round.hands_played == self.discards_sub and self.prepped then
+    if self.prepped then
         self:wiggle()
         G.E_MANAGER:add_event(Event({
             trigger = 'ease',

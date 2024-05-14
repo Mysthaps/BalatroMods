@@ -6,14 +6,22 @@ local blind = {
     vars = {}, 
     debuff = {},
     boss = {min = 2, max = 10},
-    color = HEX('85898C')
-}
-
-blind.localization = {
-    name = "The Stone",
-    text = {
-        "All Enhanced cards",
-        "are debuffed"
+    boss_colour = HEX('85898C'),
+    loc_txt = {
+        ['default'] = {
+            name = "The Stone",
+            text = {
+                "All Enhanced cards",
+                "are debuffed"
+            }
+        },
+        ['tp'] = {
+            name = "󱥽󱤛",
+            text = {
+                "All Enhanced cards",
+                "are debuffed"
+            }
+        }
     }
 }
 

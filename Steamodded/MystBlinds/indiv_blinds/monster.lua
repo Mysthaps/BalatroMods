@@ -6,16 +6,25 @@ local blind = {
     vars = {}, 
     debuff = {},
     boss = {min = 2, max = 10},
-    color = HEX('3C074D')
-}
-
-blind.localization = {
-    name = "The Monster",
-    text = {
-        "Destroy all consumables,",
-        "0 consumable slots"
+    boss_colour = HEX('3C074D'),
+    loc_txt = {
+        ['default'] = {
+            name = "The Monster",
+            text = {
+                "Destroy all consumables,",
+                "0 consumable slots"
+            }
+        },
+        ['tp'] = {
+            name = "󱥽󱥽",
+            text = {
+                "Destroy all consumables,",
+                "0 consumable slots"
+            }
+        }
     }
 }
+
 
 blind.set_blind = function(self, blind, reset, silent)
     G.GAME.consumeable_buffer = 0
@@ -34,10 +43,13 @@ blind.set_blind = function(self, blind, reset, silent)
         end}))
     end
 end
+
 blind.disable = function(self)
     G.consumeables.config.card_limit = G.consumeables.config.card_limit + self.hands_sub
 end
-blind.defeat = function(self, silent)
+
+blind.defeat = function(self)
+    sendDebugMessage("defeated")
     G.consumeables.config.card_limit = G.consumeables.config.card_limit + self.hands_sub
 end
 
