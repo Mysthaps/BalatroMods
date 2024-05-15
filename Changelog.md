@@ -9,6 +9,10 @@
 - Updated code for Blinds that trigger every hand
 - **The Monster** and **Noir Silence** should not double their effects with multiple copies of **Chicot** anymore
 
+## May 14th, 2024
+### **[HouseRules]**
+- Replaced ``HouseRules.lua`` with ``HouseRules_Experimental.lua``
+
 ## May 3rd, 2024
 ### **[MystBlinds]**
 - Fixed **The Monster** crashing with **Chicot**
