@@ -1,4 +1,14 @@
 # Changelog
+## May 15th, 2024
+### **[Repo]**
+- Mods will be versioned from now on
+### **[MystBlinds | 1.1.3]**
+- Updated to Steamodded 1.0.0
+- **The Ancestor** mininum ante **1** > **2**
+- **The Insect** now only affects each hand (from whenever cards are drawn)
+- Updated code for Blinds that trigger every hand
+- **The Monster** and **Noir Silence** should not double their effects with multiple copies of **Chicot** anymore
+
 ## May 3rd, 2024
 ### **[MystBlinds]**
 - Fixed **The Monster** crashing with **Chicot**

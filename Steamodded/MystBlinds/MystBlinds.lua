@@ -32,7 +32,7 @@ for k, v in ipairs(blind_list) do
         blind.key = v
         blind.atlas = "MystBlinds"
         blind.pos = { x = 0, y = k - 1 }
-        blind.defeat = true
+        blind.defeated = true
 
         local blind_obj = SMODS.Blind(blind)
 

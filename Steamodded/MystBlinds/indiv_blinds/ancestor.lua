@@ -5,7 +5,7 @@ local blind = {
     mult = 2, 
     vars = {localize('ph_ancestor')}, 
     debuff = {},
-    boss = {min = 1, max = 10},
+    boss = {min = 2, max = 10},
     boss_colour = HEX('D274CD'),
     loc_txt = {
         ['default'] = {

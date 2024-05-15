@@ -34,7 +34,7 @@
 - **Reward**: $$$$$
 - **Required Score**: **X2** Base
 - **Minimum Ante**: 3
-- **Description**: *Debuff leftmost Joker whenever cards are drawn*
+- **Description**: *Debuffs leftmost Joker each hand*
 
 (It will always target the Joker on the first slot, even if it is debuffed.)
 
@@ -55,7 +55,7 @@
 ![The Ancestor](./sprites/the_ancestor.gif)
 - **Reward**: $$$$$
 - **Required Score**: **X2** Base
-- **Minimum Ante**: 1
+- **Minimum Ante**: 2
 - **Description**: *(Round * 1.5) cards from deck are drawn face down*
 
 (The value is rounded up.)
