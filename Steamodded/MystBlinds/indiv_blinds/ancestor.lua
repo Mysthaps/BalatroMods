@@ -3,10 +3,10 @@ local blind = {
     slug = "ancestor", 
     dollars = 5, 
     mult = 2, 
-    vars = {localize('ph_ancestor')}, 
+    vars = {}, 
     debuff = {},
-    boss = {min = 2, max = 10},
-    boss_colour = HEX('D274CD'),
+    boss = {min = 1, max = 10},
+    boss_colour = HEX('E67CDA'),
     loc_txt = {
         ['default'] = {
             name = "The Ancestor",
@@ -24,8 +24,9 @@ local blind = {
         },
     },
     process_loc_text = function(self)
-        SMODS.Blind.process_loc_text(self)
         SMODS.process_loc_text(G.localization.misc.dictionary, "ph_ancestor", "(Round * 1.5)")
+        self.super.process_loc_text(self)
+        self.vars = {localize('ph_ancestor')}
     end
 }
 
@@ -62,16 +63,16 @@ blind.disable = function(self)
     end
 end
 
-blind.loc_def = function(self)
+blind.loc_vars = function(self)
     if self.discards_sub then 
-        return {self.discards_sub} 
+        return { vars = {self.discards_sub} }
     end
 
     if G.GAME and G.GAME.round then 
-        return { math.ceil(G.GAME.round * 1.5) } 
+        return { vars = {math.ceil(G.GAME.round * 1.5)} } 
     end
 
-    return { localize('ph_ancestor') }
+    return { vars = {localize('ph_ancestor')} }
 end
 
 

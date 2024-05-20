@@ -16,10 +16,14 @@ local blind_list = {
     "bird",
     "ancestor",
     "final_mist",
+    "fruit",
+    "food",
+    "center",
+    "symbol",
 }
 
 local mod_path = SMODS.current_mod.path
-SMODS.Sprite({ key = "MystBlinds", atlas = "ANIMATION_ATLAS", path = "MystBlinds.png", px = 34, py = 34, frames = 21 })
+SMODS.Atlas({ key = "MystBlinds", atlas_table = "ANIMATION_ATLAS", path = "MystBlinds.png", px = 34, py = 34, frames = 21 })
 
 -- basically taken from 5CEBalatro lol
 for k, v in ipairs(blind_list) do
@@ -32,7 +36,6 @@ for k, v in ipairs(blind_list) do
         blind.key = v
         blind.atlas = "MystBlinds"
         blind.pos = { x = 0, y = k - 1 }
-        blind.defeated = true
 
         local blind_obj = SMODS.Blind(blind)
 

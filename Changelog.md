@@ -1,4 +1,15 @@
 # Changelog
+## May 20th, 2024
+### **[Repo]**
+- Removed **Infodumps**, will be moved to a proper wiki in the future
+- Removed **RandomSprites**, can still be found in 0.9.8 mod releases
+- Deprecated **MystJokers** in favor of a new Joker mod soon:tm:
+### **[MystBlinds | 1.2.0]**
+- Updated the mod for the latest version of Steamodded
+- Added 4 new blinds
+- Blinds are no longer automatically discovered
+- Fixed **The Ancestor** displaying ``ERROR`` in the collections tab
+
 ## May 15th, 2024
 ### **[Repo]**
 - Mods will be versioned from now on
