@@ -5,7 +5,6 @@
 --- MOD_DESCRIPTION: Adds difficulty modifiers for your runs, stackable with stakes
 --- VERSION: 1.4.1
 
-
 --[[
 
 TODO:
@@ -520,4 +519,17 @@ function get_blind_amount(ante)
     local amount = math.floor(a * (b + (k * c) ^ d) ^ c)
     amount = amount - amount % (10 ^ math.floor(math.log10(amount) - 1))
     return amount
+end
+
+-- all_flipped
+local cardarea_emplaceref = CardArea.emplace
+function CardArea.emplace(self, card, location, stay_flipped)
+    cardarea_emplaceref(self, card, location, stay_flipped)
+    if (self == G.shop_jokers or self == G.pack_cards) and 
+       ((card.ability.set == "Joker" and G.GAME.modifiers.all_jokers_flipped) or
+       (card.ability.consumeable and G.GAME.modifiers.all_consumables_flipped)) then
+        card.facing = 'back' 
+        card.sprite_facing = 'back'
+        card.pinch.x = false
+    end
 end
