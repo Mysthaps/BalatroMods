@@ -25,8 +25,8 @@ local blind = {
     }
 }
 
-blind.drawn_to_hand = function(self)
-    if self.prepped then
+blind.drawn_to_hand = function(self, blind)
+    if blind.prepped then
         local available_jokers = {}
         for _, v in ipairs(G.jokers.cards) do
             if not v.ability.rental or (not v.ability.perishable and not v.ability.eternal) then
@@ -53,15 +53,15 @@ blind.drawn_to_hand = function(self)
                 if chosen_sticker == "perishable" then chosen_joker:set_perishable(true) end
                 if chosen_sticker == "rental" then chosen_joker:set_rental(true) end
 
-                self:wiggle()
+                blind:wiggle()
                 G.jokers.cards[1]:juice_up()
             end
         end
     end
 end
 
-blind.press_play = function(self)
-    self.prepped = true
+blind.press_play = function(self, blind)
+    blind.prepped = true
 end
 
 return blind

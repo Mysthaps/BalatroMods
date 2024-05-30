@@ -1,4 +1,11 @@
 # Changelog
+## May 30th, 2024
+### **[MystBlinds | 1.2.1]**
+- Updated the mod for the latest version of Steamodded
+- Fixed **The Ancestor** displaying a higher value than it should
+- Reworded **The Food** and **The Fruit**
+
+# Changelog
 ## May 20th, 2024
 ### **[Repo]**
 - Removed **Infodumps**, will be moved to a proper wiki in the future

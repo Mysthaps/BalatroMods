@@ -26,16 +26,16 @@ local blind = {
 }
 
 blind.set_blind = function(self, blind, reset, silent)
-    self.prepped = nil
+    blind.prepped = nil
 end
 
-blind.press_play = function(self)
-    self.prepped = true
+blind.press_play = function(self, blind)
+    blind.prepped = true
 end
 
-blind.drawn_to_hand = function(self)
-    if self.prepped then
-        self:wiggle()
+blind.drawn_to_hand = function(self, blind)
+    if blind.prepped then
+        blind:wiggle()
         G.E_MANAGER:add_event(Event({
             trigger = 'ease',
             blocking = false,

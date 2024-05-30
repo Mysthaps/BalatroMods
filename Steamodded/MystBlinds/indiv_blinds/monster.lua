@@ -28,7 +28,7 @@ local blind = {
 
 blind.set_blind = function(self, blind, reset, silent)
     G.GAME.consumeable_buffer = 0
-    self.hands_sub = 0
+    blind.hands_sub = 0
 
     ---- check for Chicot
     if not next(find_joker("Chicot")) then
@@ -37,20 +37,20 @@ blind.set_blind = function(self, blind, reset, silent)
         end
 
         G.E_MANAGER:add_event(Event({trigger = 'immediate', func = function()
-            self.hands_sub = G.consumeables.config.card_limit
-            G.consumeables.config.card_limit = G.consumeables.config.card_limit - self.hands_sub
+            blind.hands_sub = G.consumeables.config.card_limit
+            G.consumeables.config.card_limit = G.consumeables.config.card_limit - blind.hands_sub
             return true
         end}))
     end
 end
 
-blind.disable = function(self)
-    G.consumeables.config.card_limit = G.consumeables.config.card_limit + self.hands_sub
+blind.disable = function(self, blind)
+    G.consumeables.config.card_limit = G.consumeables.config.card_limit + blind.hands_sub
 end
 
-blind.defeat = function(self)
+blind.defeat = function(self, blind)
     sendDebugMessage("defeated")
-    G.consumeables.config.card_limit = G.consumeables.config.card_limit + self.hands_sub
+    G.consumeables.config.card_limit = G.consumeables.config.card_limit + blind.hands_sub
 end
 
 return blind

@@ -25,7 +25,7 @@ local blind = {
     }
 }
 
-blind.press_play = function(self)
+blind.press_play = function(self, blind)
     local available_cards = {}
     for _, v in ipairs(G.deck.cards) do
         available_cards[#available_cards+1] = v
@@ -44,7 +44,7 @@ blind.press_play = function(self)
             end
         return true end }))
 
-        self.triggered = true
+        blind.triggered = true
         return true
     end
 end

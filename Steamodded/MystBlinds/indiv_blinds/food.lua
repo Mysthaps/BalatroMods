@@ -11,28 +11,28 @@ local blind = {
         ['default'] = {
             name = "The Food",
             text = {
-                "No hands with odd",
-                "total ranks of played cards"
+                "No hands with",
+                "odd total ranks"
             }
         },
         ['tp'] = {
             name = "󱥽󱤶",
             text = {
-                "No hands with odd",
-                "total ranks of played cards"
+                "No hands with",
+                "odd total ranks"
             }
         }
     }
 }
 
-blind.debuff_hand = function(self, cards, hand, handname, check)
-    self.triggered = false
+blind.debuff_hand = function(self, blind, cards, hand, handname, check)
+    blind.triggered = false
     local total = 0
     for _, v in ipairs(cards) do
         total = total + v.base.nominal
     end
     if total % 2 == 1 then
-        self.triggered = true
+        blind.triggered = true
         return true
     end
 end

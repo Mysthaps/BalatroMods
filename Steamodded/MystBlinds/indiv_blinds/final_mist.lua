@@ -16,8 +16,8 @@ local blind = {
     }
 }
 
-blind.modify_hand = function(self, cards, poker_hands, text, mult, hand_chips)
-    self.triggered = true
+blind.modify_hand = function(self, blind, cards, poker_hands, text, mult, hand_chips)
+    blind.triggered = true
     return math.max(math.floor(mult*0.5 + 0.5), 1), math.max(math.floor(mult*0.5 + 0.5), 1), true
 end
 
