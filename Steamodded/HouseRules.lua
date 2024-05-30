@@ -3,6 +3,7 @@
 --- MOD_ID: HouseRules
 --- MOD_AUTHOR: [Mysthaps]
 --- MOD_DESCRIPTION: Adds difficulty modifiers for your runs, stackable with stakes
+--- VERSION: 1.4.1
 
 
 --[[
@@ -113,43 +114,22 @@ local all_modifiers = {
     "", 
     "", 
     "", 
-    
-    -- Modded
-    "bobm",
-    "chance_every_hand",
-    "six_card_hands",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "", 
-    "", 
-    "", 
-    "", 
 }
 
-local require_mod = {
-    bobm = "MystJokers",
-    chance_every_hand = "MoreConsumables",
-    six_card_hands = "HandOfSix",
-}
-
-function SMODS.INIT.HouseRules()
-    -- localization
+-- localization
+function SMODS.current_mod.process_loc_text()
     for k, v in pairs(localization) do
-        G.localization.misc.dictionary[k] = v
+        SMODS.process_loc_text(G.localization.misc.dictionary, k, v)
     end
-    init_localization()
-
-    -- default values
-    G.HouseRules_modifiers = {}
-    for _, v in ipairs(all_modifiers) do 
-        if v ~= "" then G.HouseRules_modifiers[v] = false end 
-    end
-
-    sendDebugMessage("Loaded HouseRules~")
 end
+
+-- default values
+G.HouseRules_modifiers = {}
+for _, v in ipairs(all_modifiers) do 
+    if v ~= "" then G.HouseRules_modifiers[v] = false end 
+end
+
+sendDebugMessage("Loaded HouseRules~")
 
 ---- HouseRules UI
 
@@ -192,7 +172,7 @@ function add_modifier_node(modifier_name, run_info)
             run_info and nil or create_toggle{ col = true, label = "", w = 0, scale = 0.6, shadow = true, ref_table = G.HouseRules_modifiers, ref_value = modifier_name },
         }},
         {n = G.UIT.C, config = { align = "c", padding = 0 }, nodes = {
-            { n = G.UIT.T, config = { text = localize('m_'..modifier_name), scale = 0.3, colour = (require_mod[modifier_name] and not SMODS.findModByID(require_mod[modifier_name])) and G.C.RED or G.C.UI.TEXT_LIGHT, shadow = true }},
+            { n = G.UIT.T, config = { text = localize('m_'..modifier_name), scale = 0.3, colour = G.C.UI.TEXT_LIGHT, shadow = true }},
         }},
     }}
 end
@@ -204,7 +184,6 @@ function create_UIBox_modifiers()
         "Challenges",
         "Jokers",
         "Legacy",
-        --"Modded"
     }
 
     G.E_MANAGER:add_event(Event({func = (function()
@@ -359,14 +338,12 @@ function Game.start_run(self, args)
     -- hmst
     for k, v in pairs(G.HouseRules_modifiers) do
         if v then
-            if (require_mod[k] and SMODS.findModByID(require_mod[k])) or not require_mod[k] then
-                if k == "flipped_cards" then table.insert(args.challenge.rules.custom, {id = 'flipped_cards', value = 4})
-                elseif k == "discard_cost" then table.insert(args.challenge.rules.custom, {id = 'discard_cost', value = 1})
-                elseif k == "minus_hand_size_per_X_dollar" then table.insert(args.challenge.rules.custom, {id = 'minus_hand_size_per_X_dollar', value = 5})
-                elseif k == "set_eternal_ante" then table.insert(args.challenge.rules.custom, {id = 'set_eternal_ante', value = 4})
-                elseif k == "set_joker_slots_ante" then table.insert(args.challenge.rules.custom, {id = 'set_joker_slots_ante', value = 4})
-                else table.insert(args.challenge.rules.custom, {id = k}) end
-            end
+            if k == "flipped_cards" then table.insert(args.challenge.rules.custom, {id = 'flipped_cards', value = 4})
+            elseif k == "discard_cost" then table.insert(args.challenge.rules.custom, {id = 'discard_cost', value = 1})
+            elseif k == "minus_hand_size_per_X_dollar" then table.insert(args.challenge.rules.custom, {id = 'minus_hand_size_per_X_dollar', value = 5})
+            elseif k == "set_eternal_ante" then table.insert(args.challenge.rules.custom, {id = 'set_eternal_ante', value = 4})
+            elseif k == "set_joker_slots_ante" then table.insert(args.challenge.rules.custom, {id = 'set_joker_slots_ante', value = 4})
+            else table.insert(args.challenge.rules.custom, {id = k}) end
         end
     end
 
@@ -543,78 +520,4 @@ function get_blind_amount(ante)
     local amount = math.floor(a * (b + (k * c) ^ d) ^ c)
     amount = amount - amount % (10 ^ math.floor(math.log10(amount) - 1))
     return amount
-end
-
--- chance_every_hand
-local drawn_to_handref = Blind.drawn_to_hand
-function Blind.drawn_to_hand(self)
-    if G.GAME.modifiers.chance_every_hand and G.P_CENTERS["c_mc_chance"] then
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.5,
-            func = function()
-                local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W/2, G.play.T.y + G.play.T.h/2-G.CARD_H/2, G.CARD_W, G.CARD_H, 
-                G.P_CARDS.empty, G.P_CENTERS["c_mc_chance"], {bypass_discovery_center = true, bypass_discovery_ui = true})
-                card.cost = 0
-                card:update()
-                G.FUNCS.use_card({config = {ref_table = card}})
-                card:start_materialize()
-                return true
-            end
-        }))
-    end
-
-    drawn_to_handref(self)
-end
-
--- six_card_hands
-local can_play = false
-local debuff_handref = Blind.debuff_hand
-function Blind.debuff_hand(self, cards, hand, handname, check)
-    if not G.GAME.modifiers.six_card_hands then return debuff_handref(self, cards, hand, handname, check) end
-    local ret = debuff_handref(self, cards, hand, handname, check)
-    if ret then 
-        can_play = true
-        return ret 
-    end
-    local allowed_list = {
-        "Flush Six",
-        "Flusher House",
-        "Two Flush Triple",
-        "Six of a Kind",
-        "Straighter Flush",
-        "Fuller House",
-        "Two of a Triple",
-        "Flusher",
-        "Straighter",
-        "Three Pair",
-    }
-
-    can_play = false
-    for _, v in pairs(allowed_list) do
-        if handname == v then
-            can_play = true
-        end
-    end
-
-    if not can_play then return true end
-end
-
-local get_loc_debuff_textref = Blind.get_loc_debuff_text
-function Blind.get_loc_debuff_text(self)
-    if G.GAME.modifiers.six_card_hands and not can_play then return localize('ph_six_card_hands') end
-    return get_loc_debuff_textref(self)
-end
-
--- all_flipped
-local cardarea_emplaceref = CardArea.emplace
-function CardArea.emplace(self, card, location, stay_flipped)
-    cardarea_emplaceref(self, card, location, stay_flipped)
-    if (self == G.shop_jokers or self == G.pack_cards) and 
-       ((card.ability.set == "Joker" and G.GAME.modifiers.all_jokers_flipped) or
-       (card.ability.consumeable and G.GAME.modifiers.all_consumables_flipped)) then
-        card.facing = 'back' 
-        card.sprite_facing = 'back'
-        card.pinch.x = false
-    end
 end

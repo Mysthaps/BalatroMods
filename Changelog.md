@@ -4,6 +4,8 @@
 - Updated the mod for the latest version of Steamodded
 - Fixed **The Ancestor** displaying a higher value than it should
 - Reworded **The Food** and **The Fruit**
+### **[HouseRules | 1.4.1]**
+- Updated the mod for the latest version of Steamodded
 
 # Changelog
 ## May 20th, 2024
