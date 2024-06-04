@@ -38,7 +38,7 @@ joker.calculate = function(self, context)
                 delay = 0.5,
                 func = function()    
                     self:flip()
-                    self:set_ability(G.P_CENTERS['j_bobm'], false, true)
+                    self:set_ability(G.P_CENTERS['j_myst_bobm'], false, true)
                     play_sound('card1', 1.1)
                     return true
                 end

@@ -24,7 +24,7 @@ joker.loc_def = function(self)
 end
 
 joker.calculate = function(self, context)
-    if SMODS.end_calculate_context(context) then
+    if SMODS.end_calculate_context(context) and context.scoring_hand then
         local straight = get_straight(context.scoring_hand)[1]
         if not straight then return end
 
