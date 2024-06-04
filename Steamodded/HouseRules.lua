@@ -3,7 +3,7 @@
 --- MOD_ID: HouseRules
 --- MOD_AUTHOR: [Mysthaps]
 --- MOD_DESCRIPTION: Adds difficulty modifiers for your runs, stackable with stakes
---- VERSION: 1.4.1
+--- VERSION: 1.4.2
 
 --[[
 
@@ -485,13 +485,13 @@ function Card.set_ability(self, center, initial, delay_sprites)
 end
 
 local generate_card_uiref = generate_card_ui
-function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end)
+function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
     if G.GAME.modifiers.booster_less_choices then
         if _c.set == "Booster" then
             _c.config.extra = _c.config.extra - 1
         end
     end
-    local obj = generate_card_uiref(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end)
+    local obj = generate_card_uiref(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
     if G.GAME.modifiers.booster_less_choices then
         if _c.set == "Booster" then
             _c.config.extra = _c.config.extra + 1

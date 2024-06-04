@@ -1,4 +1,11 @@
 # Changelog
+## June 4th, 2024
+### **[MystBlinds | 1.2.2]**
+- Added the mod's icon
+- Blacklisted **The Stone** when using **Cryptid**'s Enhanced decks
+### **[HouseRules | 1.4.2]**
+- Fixed crash when generating card UI
+
 ## May 30th, 2024
 ### **[MystBlinds | 1.2.1]**
 - Updated the mod for the latest version of Steamodded
