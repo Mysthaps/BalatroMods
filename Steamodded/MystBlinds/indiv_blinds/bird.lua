@@ -54,7 +54,7 @@ blind.drawn_to_hand = function(self, blind)
                 if chosen_sticker == "rental" then chosen_joker:set_rental(true) end
 
                 blind:wiggle()
-                G.jokers.cards[1]:juice_up()
+                chosen_joker:juice_up()
             end
         end
     end
