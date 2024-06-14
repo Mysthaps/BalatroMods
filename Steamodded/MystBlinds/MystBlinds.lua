@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: A pack of Blinds
 --- DISPLAY_NAME: MystBlinds
 --- BADGE_COLOUR: EDA9D3
---- VERSION: 1.2.2
+--- VERSION: 1.2.3
 
 local blind_list = {
     "market",

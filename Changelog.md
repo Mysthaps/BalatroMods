@@ -1,4 +1,8 @@
 # Changelog
+## June 14th, 2024
+### **[MystBlinds | 1.2.3]**
+- Fixed **The Bird** juicing up the wrong Joker
+
 ## June 4th, 2024
 ### **[MystBlinds | 1.2.2]**
 - Added the mod's icon
