@@ -1,3 +1,6 @@
+# this repository will no longer be maintained since it is a mess. however, it will still be up in case you want to download my older mods.
+if you want to download the newest version my mods, find their repositories from my GitHub profile.
+
 ### A collection of mods made by Mysthaps for the game Balatro.
 
 # Mods
